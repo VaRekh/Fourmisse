@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Assets.Scripts;
 
 namespace Assets.Library
 {
@@ -12,6 +13,10 @@ namespace Assets.Library
         private uint quantity_per_collect;
         [SerializeField]
         BoundedUint load;
+        [SerializeField]
+        private LayerReference resource_layer;
+        [SerializeField]
+        private LayerReference anthill_layer;
 
         public float Speed 
             => speed;
@@ -24,5 +29,10 @@ namespace Assets.Library
             get => load;
             set => load = value;
         }
+
+        public LayerReference ResourceLayer
+            => resource_layer;
+        public LayerReference AnthillLayer
+            => anthill_layer;
     }
 }

@@ -18,7 +18,7 @@ namespace Assets.Library.StateMachines.Collector
         {
             int collided_layer = collision.gameObject.layer;
 
-            var collectable = GetCollided<Collectable>(collision, collided_layer, "Resources");
+            var collectable = GetCollided<Collectable>(collision, collided_layer, Info.ResourceLayer);
 
             if (collectable != null)
             {
@@ -26,7 +26,7 @@ namespace Assets.Library.StateMachines.Collector
             }
             else
             {
-                var anthill = GetCollided<Anthill>(collision, collided_layer, "Anthill");
+                var anthill = GetCollided<Anthill>(collision, collided_layer, Info.AnthillLayer);
 
                 if (anthill != null)
                 {
@@ -34,10 +34,10 @@ namespace Assets.Library.StateMachines.Collector
                 }
             }
 
-            static TComponent GetCollided<TComponent>(Collider2D collision, int collided_layer, string layer_name)
+            static TComponent GetCollided<TComponent>(Collider2D collision, int collided_layer, LayerReference layer)
                 where TComponent : Component
             {
-                int component_layer = LayerMask.NameToLayer(layer_name);
+                int component_layer = layer.Index;
                 bool is_layer_collided = collided_layer == component_layer;
                 TComponent component = null;
 
