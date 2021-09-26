@@ -23,12 +23,14 @@ namespace Assets.Library.StateMachines.Collector
             state_updater.StateChanged.Invoke(StateCode.Collect);
             stopwatch.Reset();
 
-            collectable = GetCollectable(data);
+            bool is_data_available = data.Length > 0;
+            collectable = GetCollectable(data[0]);
 
-            Collectable GetCollectable(object[] data)
+
+            Collectable GetCollectable(object data)
             {
-                bool is_data_available = data.Length > 0;
-                Collectable collectable_found = is_data_available ? data[0] as Collectable : null;
+
+                Collectable collectable_found = is_data_available ? data as Collectable : null;
 
                 Assert.IsNotNull(collectable_found);
 
