@@ -17,10 +17,10 @@ namespace Assets.Library.StateMachines.Seeker
         public override void OnTriggerEnter2D(Collider2D collision)
         {
             int collided_layer = collision.gameObject.layer;
-            int base_layer = LayerMask.NameToLayer("Base");
-            bool is_base_collided = collided_layer == base_layer;
+            int anthill_layer = LayerMask.NameToLayer("Anthill");
+            bool is_anthill_collided = collided_layer == anthill_layer;
 
-            if (is_base_collided)
+            if (is_anthill_collided)
             {
                 state_updater.Change(StateCode.Seek);
             }
