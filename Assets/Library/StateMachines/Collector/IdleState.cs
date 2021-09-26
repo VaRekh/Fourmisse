@@ -18,7 +18,7 @@ namespace Assets.Library.StateMachines.Collector
         {
             int collided_layer = collision.gameObject.layer;
 
-            var collectable = GetResourceCollided(collided_layer);
+            var collectable = GetCollided<Collectable>(collision, collided_layer, "Resources");
 
             if (collectable != null)
             {
@@ -26,7 +26,7 @@ namespace Assets.Library.StateMachines.Collector
             }
             else
             {
-                var anthill = GetAnthillCollided(collided_layer);
+                var anthill = GetCollided<Anthill>(collision, collided_layer, "Anthill");
 
                 if (anthill != null)
                 {
@@ -34,36 +34,20 @@ namespace Assets.Library.StateMachines.Collector
                 }
             }
 
-
-            Collectable GetResourceCollided(int collided_layer)
+            static TComponent GetCollided<TComponent>(Collider2D collision, int collided_layer, string layer_name)
+                where TComponent : Component
             {
-                int resource_layer = LayerMask.NameToLayer("Resources");
-                bool is_resource_collided = collided_layer == resource_layer;
-                Collectable collectable = null;
+                int component_layer = LayerMask.NameToLayer(layer_name);
+                bool is_layer_collided = collided_layer == component_layer;
+                TComponent component = null;
 
-                if (is_resource_collided)
+                if (is_layer_collided)
                 {
-                    collectable = collision.gameObject.GetComponent<Collectable>();
+                    component = collision.gameObject.GetComponent<TComponent>();
                 }
 
-                return collectable;
+                return component;
             }
-
-            Anthill GetAnthillCollided(int collided_layer)
-            {
-                int anthill_layer = LayerMask.NameToLayer("Anthill");
-                bool is_anthill_collided = collided_layer == anthill_layer;
-                Anthill anthill = null;
-
-                if (is_anthill_collided)
-                {
-                    anthill = collision.gameObject.GetComponent<Anthill>();
-                }
-
-                return anthill;
-            }
-
-            
         }
     }
 }
