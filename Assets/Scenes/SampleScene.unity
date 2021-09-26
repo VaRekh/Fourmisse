@@ -384,5 +384,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: fourmi
       objectReference: {fileID: 0}
+    - target: {fileID: 8347261762274130249, guid: 24f4336c66dc043408d45b8f3e205b65, type: 3}
+      propertyPath: info.anthill_layer
+      value: 
+      objectReference: {fileID: 11400000, guid: 0f6410393aecc514b8c21d89e663dbdb, type: 2}
+    - target: {fileID: 8347261762274130249, guid: 24f4336c66dc043408d45b8f3e205b65, type: 3}
+      propertyPath: info.resource_layer
+      value: 
+      objectReference: {fileID: 11400000, guid: f532ed398f97c6e469f695b4ef18e982, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24f4336c66dc043408d45b8f3e205b65, type: 3}
