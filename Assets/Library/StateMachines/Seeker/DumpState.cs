@@ -6,8 +6,8 @@ namespace Assets.Library.StateMachines.Seeker
     public class DumpState : State
     {
 
-        public DumpState(StateUpdater updater)
-            : base(updater)
+        public DumpState(StateUpdater updater, ControllerInfo info)
+            : base(updater, info)
         { }
 
 

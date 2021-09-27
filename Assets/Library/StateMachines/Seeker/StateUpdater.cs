@@ -18,6 +18,7 @@ namespace Assets.Library.StateMachines.Seeker
 
         public StateUpdater
             (
+            ControllerInfo info,
             UnityEvent<CollectorStateCode> collector_state_changed,
             StateCode                      base_state_code = StateCode.Seek
             )
@@ -33,16 +34,16 @@ namespace Assets.Library.StateMachines.Seeker
                 switch (code)
                 {
                     case StateCode.Seek:
-                        state = new SeekState(this);
+                        state = new SeekState(this, info);
                         break;
                     case StateCode.Collect:
-                        state = new CollectState(this);
+                        state = new CollectState(this, info);
                         break;
                     case StateCode.Return:
-                        state = new ReturnState(this);
+                        state = new ReturnState(this, info);
                         break;
                     case StateCode.Dump:
-                        state = new DumpState(this);
+                        state = new DumpState(this, info);
                         break;
                     default:
                         break;

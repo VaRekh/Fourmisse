@@ -5,8 +5,8 @@ namespace Assets.Library.StateMachines.Seeker
     public class CollectState : State
     {
 
-        public CollectState(StateUpdater updater)
-            : base(updater)
+        public CollectState(StateUpdater updater, ControllerInfo info)
+            : base(updater, info)
         { }
 
 

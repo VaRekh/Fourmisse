@@ -5,8 +5,8 @@ namespace Assets.Library.StateMachines.Seeker
 {
     public class ReturnState : State
     {
-        public ReturnState(StateUpdater updater)
-            : base(updater)
+        public ReturnState(StateUpdater updater, ControllerInfo info)
+            : base(updater, info)
         { }
 
         public override void Enter(params object[] data)
@@ -17,7 +17,7 @@ namespace Assets.Library.StateMachines.Seeker
         public override void OnTriggerEnter2D(Collider2D collision)
         {
             int collided_layer = collision.gameObject.layer;
-            int anthill_layer = LayerMask.NameToLayer("Anthill");
+            int anthill_layer = Info.AnthillLayer.Index;
             bool is_anthill_collided = collided_layer == anthill_layer;
 
             if (is_anthill_collided)

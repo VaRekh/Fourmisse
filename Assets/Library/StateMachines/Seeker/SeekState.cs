@@ -4,8 +4,8 @@ namespace Assets.Library.StateMachines.Seeker
 {
     public class SeekState : State
     {
-        public SeekState(StateUpdater updater)
-            : base(updater)
+        public SeekState(StateUpdater updater, ControllerInfo info)
+            : base(updater, info)
         { }
 
         public override void Enter(params object[] data)

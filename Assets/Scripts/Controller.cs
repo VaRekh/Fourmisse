@@ -17,6 +17,8 @@ namespace Assets.Scripts
         private float direction_change_per_second;
         [SerializeField]
         private Transform anthill;
+        [SerializeField]
+        private ControllerInfo info;
 
         private Rigidbody2D rb;
         private Stopwatch stopwatch;
@@ -43,7 +45,7 @@ namespace Assets.Scripts
 
             stopwatch = new Stopwatch(DirectionChangeInterval);
 
-            seeker_updater = new SeekerStateUpdater(collector.StateChanged);
+            seeker_updater = new SeekerStateUpdater(info, collector.StateChanged);
             seeker_updater.StateChanged.AddListener(ReactToStateChanged);
             seeker_updater.Start();
 
