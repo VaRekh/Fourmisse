@@ -3,25 +3,25 @@
 
 namespace Assets.Library.StateMachines.Seeker
 {
-    public class DumpState : State
+    public class DumpState : State<StateCode, ControllerInfo>
     {
 
-        public DumpState(StateUpdater updater, ControllerInfo info)
+        public DumpState(Updater<StateCode, ControllerInfo> updater, ControllerInfo info)
             : base(updater, info)
         { }
 
 
         public override void Enter(params object[] data)
         {
-            state_updater.StateChanged.Invoke(StateCode.Dump);
+            Updater.StateChanged.Invoke(StateCode.Dump);
         }
 
-        public override void ReactToCollectorStateChanged(CollectorStateCode new_state)
+        public void ReactToCollectorStateChanged(CollectorStateCode new_state)
         {
             switch (new_state)
             {
                 case CollectorStateCode.Idle:
-                    state_updater.Change(StateCode.Seek);
+                    Updater.Change(StateCode.Seek);
                     break;
                 default:
                     break;

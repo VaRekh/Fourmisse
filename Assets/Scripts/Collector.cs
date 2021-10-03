@@ -1,7 +1,9 @@
 using UnityEngine;
 using UnityEngine.Events;
 using Assets.Library;
+using Assets.Library.StateMachines;
 using Assets.Library.StateMachines.Collector;
+using CollectorFactory = Assets.Library.StateMachines.Collector.Factory;
 
 namespace Assets.Scripts
 {
@@ -12,7 +14,7 @@ namespace Assets.Scripts
         [SerializeField]
         private CollectorInfo info;
 
-        private StateUpdater collect_state;
+        private Updater<StateCode, CollectorInfo> collect_updater;
 
         public UnityEvent<StateCode> StateChanged;
 
@@ -22,25 +24,27 @@ namespace Assets.Scripts
         {
             StateChanged = new UnityEvent<StateCode>();
 
-            collect_state = new StateUpdater(info);
-            collect_state.StateChanged.AddListener(ReactToStateChanged);
-            collect_state.Start();
+            CollectorFactory collector_factory = new CollectorFactory();
+
+            collect_updater = new Updater<StateCode, CollectorInfo>(info, collector_factory);
+            collect_updater.StateChanged.AddListener(ReactToStateChanged);
+            collect_updater.Start();
         }
 
         // Update is called once per frame
         private void Update()
         {
-            collect_state.Update(Time.deltaTime);
+            collect_updater.Update(Time.deltaTime);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            collect_state.OnTriggerEnter2D(collision);
+            collect_updater.OnTriggerEnter2D(collision);
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            collect_state.OnTriggerExit2D(collision);
+            collect_updater.OnTriggerExit2D(collision);
         }
 
         private void ReactToStateChanged(StateCode new_state)

@@ -3,15 +3,15 @@ using UnityEngine;
 
 namespace Assets.Library.StateMachines.Collector
 {
-    public class IdleState : State
+    public class IdleState : State<StateCode, CollectorInfo>
     {
-        public IdleState(StateUpdater updater, CollectorInfo info)
+        public IdleState(Updater<StateCode, CollectorInfo> updater, CollectorInfo info)
             : base(updater, info)
         { }
 
         public override void Enter(params object[] data)
         {
-            state_updater.StateChanged.Invoke(StateCode.Idle);
+            Updater.StateChanged.Invoke(StateCode.Idle);
         }
 
         public override void OnTriggerEnter2D(Collider2D collision)
@@ -22,7 +22,7 @@ namespace Assets.Library.StateMachines.Collector
 
             if (collectable != null)
             {
-                state_updater.Change(StateCode.Collect, collectable);
+                Updater.Change(StateCode.Collect, collectable);
             }
             else
             {
@@ -30,7 +30,7 @@ namespace Assets.Library.StateMachines.Collector
 
                 if (anthill != null)
                 {
-                    state_updater.Change(StateCode.Dump, anthill);
+                    Updater.Change(StateCode.Dump, anthill);
                 }
             }
 

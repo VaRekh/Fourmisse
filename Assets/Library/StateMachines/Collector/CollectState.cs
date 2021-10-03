@@ -4,15 +4,15 @@ using UnityEngine.Assertions;
 
 namespace Assets.Library.StateMachines.Collector
 {
-    public class CollectState : State
+    public class CollectState : State<StateCode, CollectorInfo>
     {
-        private Stopwatch stopwatch;
+        private readonly Stopwatch stopwatch;
         private Collectable collectable;
 
         private float CollectingInterval
             => 1f / Info.Speed;
 
-        public CollectState(StateUpdater updater, CollectorInfo info)
+        public CollectState(Updater<StateCode, CollectorInfo> updater, CollectorInfo info)
             : base(updater, info)
         {
             stopwatch = new Stopwatch(0f);
@@ -20,18 +20,17 @@ namespace Assets.Library.StateMachines.Collector
 
         public override void Enter(params object[] data)
         {
-            state_updater.StateChanged.Invoke(StateCode.Collect);
+            Updater.StateChanged.Invoke(StateCode.Collect);
             stopwatch.Reset();
 
             bool is_data_available = data.Length > 0;
+            Assert.IsTrue(is_data_available);
+            collectable = null;
             collectable = GetCollectable(data[0]);
 
-
-            Collectable GetCollectable(object data)
+            static Collectable GetCollectable(object data)
             {
-
-                Collectable collectable_found = is_data_available ? data as Collectable : null;
-
+                Collectable collectable_found = data as Collectable;
                 Assert.IsNotNull(collectable_found);
 
                 return collectable_found;
@@ -58,14 +57,14 @@ namespace Assets.Library.StateMachines.Collector
 
             if (is_capacity_full || is_collectable_empty)
             {
-                state_updater.Change(StateCode.Idle);
+                Updater.Change(StateCode.Idle);
             }
         }
 
 
         public override void OnTriggerExit2D(Collider2D collision)
         {
-            state_updater.Change(StateCode.Idle);
+            Updater.Change(StateCode.Idle);
         }
     }
 }

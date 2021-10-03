@@ -2,23 +2,25 @@
 
 namespace Assets.Library.StateMachines.Seeker
 {
-    public class SeekState : State
+    public class SeekState : State<StateCode, ControllerInfo>
     {
-        public SeekState(StateUpdater updater, ControllerInfo info)
+        public SeekState(Updater<StateCode, ControllerInfo> updater, ControllerInfo info)
             : base(updater, info)
-        { }
+        {
+            info.CollectorStateChanged.AddListener(ReactToCollectorStateChanged);
+        }
 
         public override void Enter(params object[] data)
         {
-            state_updater.StateChanged.Invoke(StateCode.Seek);
+            Updater.StateChanged.Invoke(StateCode.Seek);
         }
 
-        public override void ReactToCollectorStateChanged(CollectorStateCode new_state)
+        public void ReactToCollectorStateChanged(CollectorStateCode new_state)
         {
             switch (new_state)
             {
                 case CollectorStateCode.Collect:
-                    state_updater.Change(StateCode.Collect);
+                    Updater.Change(StateCode.Collect);
                     break;
                 case CollectorStateCode.Idle:
                 case CollectorStateCode.Dump:

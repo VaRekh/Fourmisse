@@ -1,14 +1,18 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Assets.Library.StateMachines
 {
-    public abstract class State<StateUpdater>
+    public abstract class State<TStateCode, TInfo>
+        where TStateCode : Enum
     {
-        protected StateUpdater state_updater;
+        protected Updater<TStateCode, TInfo> Updater { get; private set; }
+        protected TInfo Info { get; private set; }
 
-        public State(StateUpdater updater)
+        public State(Updater<TStateCode, TInfo> updater, TInfo info)
         {
-            state_updater = updater;
+            Updater = updater;
+            Info = info;
         }
 
 

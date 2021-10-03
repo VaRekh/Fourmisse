@@ -3,15 +3,15 @@ using CollectorStateCode = Assets.Library.StateMachines.Collector.StateCode;
 
 namespace Assets.Library.StateMachines.Seeker
 {
-    public class ReturnState : State
+    public class ReturnState : State<StateCode, ControllerInfo>
     {
-        public ReturnState(StateUpdater updater, ControllerInfo info)
+        public ReturnState(Updater<StateCode, ControllerInfo> updater, ControllerInfo info)
             : base(updater, info)
         { }
 
         public override void Enter(params object[] data)
         {
-            state_updater.StateChanged.Invoke(StateCode.Return);
+            Updater.StateChanged.Invoke(StateCode.Return);
         }
 
         public override void OnTriggerEnter2D(Collider2D collision)
@@ -22,16 +22,16 @@ namespace Assets.Library.StateMachines.Seeker
 
             if (is_anthill_collided)
             {
-                state_updater.Change(StateCode.Seek);
+                Updater.Change(StateCode.Seek);
             }
         }
 
-        public override void ReactToCollectorStateChanged(CollectorStateCode new_state)
+        public void ReactToCollectorStateChanged(CollectorStateCode new_state)
         {
             switch (new_state)
             {
                 case CollectorStateCode.Dump:
-                    state_updater.Change(StateCode.Dump);
+                    Updater.Change(StateCode.Dump);
                     break;
                 case CollectorStateCode.Idle:
                 case CollectorStateCode.Collect:

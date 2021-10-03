@@ -1,8 +1,9 @@
 using System;
 using UnityEngine;
 using UnityEngine.Assertions;
+using Assets.Library.StateMachines;
 using SeekerStateCode = Assets.Library.StateMachines.Seeker.StateCode;
-using SeekerStateUpdater = Assets.Library.StateMachines.Seeker.StateUpdater;
+using SeekerFactory = Assets.Library.StateMachines.Seeker.Factory;
 using Assets.Library;
 
 namespace Assets.Scripts
@@ -28,7 +29,7 @@ namespace Assets.Scripts
 
         private Vector2Generator vector_generator;
 
-        private SeekerStateUpdater seeker_updater;
+        private Updater<SeekerStateCode, ControllerInfo> seeker_updater;
 
         private float DirectionChangeInterval
             => 1f / direction_change_per_second;
@@ -45,7 +46,10 @@ namespace Assets.Scripts
 
             stopwatch = new Stopwatch(DirectionChangeInterval);
 
-            seeker_updater = new SeekerStateUpdater(info, collector.StateChanged);
+            info.CollectorStateChanged = collector.StateChanged;
+            SeekerFactory seeker_factory = new SeekerFactory();
+
+            seeker_updater = new Updater<SeekerStateCode, ControllerInfo>(info, seeker_factory);
             seeker_updater.StateChanged.AddListener(ReactToStateChanged);
             seeker_updater.Start();
 
