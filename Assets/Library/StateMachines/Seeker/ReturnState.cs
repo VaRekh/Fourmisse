@@ -12,8 +12,14 @@ namespace Assets.Library.StateMachines.Seeker
         public override void Enter(params object[] data)
         {
             Updater.StateChanged.Invoke(StateCode.Return);
+            Info.CollectorStateChanged.AddListener(ReactToCollectorStateChanged);
         }
 
+        public override void Exit()
+        {
+            Info.CollectorStateChanged.RemoveListener(ReactToCollectorStateChanged);
+        }
+        /*
         public override void OnTriggerEnter2D(Collider2D collision)
         {
             int collided_layer = collision.gameObject.layer;
@@ -25,7 +31,7 @@ namespace Assets.Library.StateMachines.Seeker
                 Updater.Change(StateCode.Seek);
             }
         }
-
+        */
         public void ReactToCollectorStateChanged(CollectorStateCode new_state)
         {
             switch (new_state)

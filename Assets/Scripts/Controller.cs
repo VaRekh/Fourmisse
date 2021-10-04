@@ -69,6 +69,9 @@ namespace Assets.Scripts
                     case SeekerStateCode.Return:
                         Move = Return;
                         break;
+                    case SeekerStateCode.Dump:
+                        Move = Dump;
+                        break;
                     default:
                         break;
                 }
@@ -100,6 +103,13 @@ namespace Assets.Scripts
                 Vector2 anthill_direction = current_position.To(anthill_position);
                 Vector2 normalized_direction = anthill_direction.normalized;
                 rb.ChangeDirection(movespeed, normalized_direction);
+
+                Move = DoNothing;
+            }
+
+            void Dump()
+            {
+                rb.ChangeDirection(0f, Vector2.zero);
 
                 Move = DoNothing;
             }

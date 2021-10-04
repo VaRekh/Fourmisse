@@ -48,15 +48,18 @@ namespace Assets.Library.StateMachines
         {
             current_state.Exit();
 
+            Debug.Log($"old state {typeof(TStateCode).FullName} {Enum.GetName(typeof(TStateCode), current_state_code)}");
             current_state_code = new_state_code;
             int current_state_index = Enum<TStateCode>.Convert(current_state_code);;
             current_state = states[current_state_index];
+            Debug.Log($"new state {typeof(TStateCode).FullName} {Enum.GetName(typeof(TStateCode), current_state_code)}");
 
             current_state.Enter(data);
         }
 
         public void Update(float delta_time)
         {
+            Debug.Log($"state {typeof(TStateCode).FullName} {Enum.GetName(typeof(TStateCode), current_state_code)}");
             current_state.Update(delta_time);
         }
 
