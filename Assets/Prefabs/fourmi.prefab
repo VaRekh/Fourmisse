@@ -66,8 +66,13 @@ MonoBehaviour:
     load:
       capacity: 10
       current_value: 0
+<<<<<<< Updated upstream
     resource_layer: {fileID: 11400000, guid: f532ed398f97c6e469f695b4ef18e982, type: 2}
     anthill_layer: {fileID: 11400000, guid: 0f6410393aecc514b8c21d89e663dbdb, type: 2}
+=======
+    resource_layer: {fileID: 0}
+    anthill_layer: {fileID: 0}
+>>>>>>> Stashed changes
   StateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -191,13 +196,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movespeed: 30
-  direction_change_per_second: 1
+  direction_change_per_second: 0.25
   anthill: {fileID: 0}
   info:
     anthill_layer: {fileID: 0}
     collector_state_changed:
       m_PersistentCalls:
         m_Calls: []
+<<<<<<< Updated upstream
 --- !u!114 &6983465146528236365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,3 +218,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pheromone: {fileID: 3796975487214387578, guid: 35e04e02dac3204458ede0ae4d321683, type: 3}
   pheromone_per_second: 0.25
+=======
+>>>>>>> Stashed changes
