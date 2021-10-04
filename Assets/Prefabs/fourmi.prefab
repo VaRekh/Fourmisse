@@ -66,6 +66,8 @@ MonoBehaviour:
     load:
       capacity: 10
       current_value: 0
+    resource_layer: {fileID: 11400000, guid: f532ed398f97c6e469f695b4ef18e982, type: 2}
+    anthill_layer: {fileID: 11400000, guid: 0f6410393aecc514b8c21d89e663dbdb, type: 2}
   StateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -81,6 +83,7 @@ GameObject:
   - component: {fileID: 6983465146694512339}
   - component: {fileID: 6983465146694512337}
   - component: {fileID: 6983465146694512348}
+  - component: {fileID: 6983465146528236365}
   m_Layer: 0
   m_Name: fourmi
   m_TagString: Untagged
@@ -190,3 +193,22 @@ MonoBehaviour:
   movespeed: 30
   direction_change_per_second: 1
   anthill: {fileID: 0}
+  info:
+    anthill_layer: {fileID: 0}
+    collector_state_changed:
+      m_PersistentCalls:
+        m_Calls: []
+--- !u!114 &6983465146528236365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6983465146694512349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 256adcc058b7bb14894bd07ae4e7d4a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pheromone: {fileID: 3796975487214387578, guid: 35e04e02dac3204458ede0ae4d321683, type: 3}
+  pheromone_per_second: 0.25

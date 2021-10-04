@@ -123,68 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &136999200
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 136999203}
-  - component: {fileID: 136999202}
-  - component: {fileID: 136999201}
-  m_Layer: 0
-  m_Name: Pheromone
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &136999201
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 136999200}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6627a307d6ed8d4aa544f84dc0cfd5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lifespan: 10
-  minimum_size_percentage: 30
---- !u!58 &136999202
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 136999200}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 1
---- !u!4 &136999203
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 136999200}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.42, y: -0.04, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -442,34 +380,13 @@ PrefabInstance:
       propertyPath: anthill
       value: 
       objectReference: {fileID: 1459043933}
+    - target: {fileID: 6983465146694512348, guid: 24f4336c66dc043408d45b8f3e205b65, type: 3}
+      propertyPath: direction_change_per_second
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6983465146694512349, guid: 24f4336c66dc043408d45b8f3e205b65, type: 3}
       propertyPath: m_Name
       value: fourmi
       objectReference: {fileID: 0}
-    - target: {fileID: 8347261762274130249, guid: 24f4336c66dc043408d45b8f3e205b65, type: 3}
-      propertyPath: info.anthill_layer
-      value: 
-      objectReference: {fileID: 11400000, guid: 0f6410393aecc514b8c21d89e663dbdb, type: 2}
-    - target: {fileID: 8347261762274130249, guid: 24f4336c66dc043408d45b8f3e205b65, type: 3}
-      propertyPath: info.resource_layer
-      value: 
-      objectReference: {fileID: 11400000, guid: f532ed398f97c6e469f695b4ef18e982, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24f4336c66dc043408d45b8f3e205b65, type: 3}
---- !u!1 &6983465146528236364 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6983465146694512349, guid: 24f4336c66dc043408d45b8f3e205b65, type: 3}
-  m_PrefabInstance: {fileID: 6983465146528236363}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &6983465146528236365
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6983465146528236364}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 256adcc058b7bb14894bd07ae4e7d4a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

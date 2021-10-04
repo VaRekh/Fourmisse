@@ -36,7 +36,9 @@ namespace Assets.Scripts
                 (lifespan, age.CurrentValue, MinimumSize, original_size);
             circle_collider.radius = new_size;
 
-            if (age.CurrentValue >= lifespan)
+            bool is_faded = age.CurrentValue >= lifespan;
+
+            if (is_faded)
             {
                 Destroy(gameObject);
             }
