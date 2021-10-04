@@ -14,6 +14,12 @@ namespace Assets.Library.StateMachines.Seeker
         public override void Enter(params object[] data)
         {
             Updater.StateChanged.Invoke(StateCode.Dump);
+            Info.CollectorStateChanged.AddListener(ReactToCollectorStateChanged);
+        }
+
+        public override void Exit()
+        {
+            Info.CollectorStateChanged.RemoveListener(ReactToCollectorStateChanged);
         }
 
         public void ReactToCollectorStateChanged(CollectorStateCode new_state)
