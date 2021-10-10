@@ -60,11 +60,5 @@ namespace Assets.Library.StateMachines.Collector
                 Updater.Change(StateCode.Idle);
             }
         }
-
-
-        public override void OnTriggerExit2D(Collider2D collision)
-        {
-            Updater.Change(StateCode.Idle);
-        }
     }
 }
