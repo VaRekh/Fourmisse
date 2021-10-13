@@ -4,37 +4,39 @@ using Assets.Library;
 namespace Assets.Scripts
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(Collider2D))]
     public class Pheromone : MonoBehaviour
     {
         [SerializeField]
+        [Tooltip("[O ; 1000] seconds")]
         [Range(0f, 1000f)]
         private float lifespan;
         [SerializeField]
+        [Tooltip("[O - 100] %")]
+        [Range(0f, 100f)]
         private float minimum_size_percentage;
 
         private Stopwatch age;
 
-        private CircleCollider2D circle_collider;
-        float original_size;
+        float original_magnitude;
+        Vector3 normalized_scale;
 
-        private float MinimumSize
-            => minimum_size_percentage / 100f * original_size;
+        private float MinimumMagnitude
+            => minimum_size_percentage / 100f * original_magnitude;
 
         private void Start()
         {
             age = new Stopwatch();
-            circle_collider = GetComponent<CircleCollider2D>();
-            original_size = circle_collider.radius;
+            normalized_scale = transform.localScale.normalized;
+            original_magnitude = transform.localScale.magnitude;
         }
 
         private void Update()
         {
             age.Update(Time.deltaTime);
 
-            float new_size = ComputeColliderSize
-                (lifespan, age.CurrentValue, MinimumSize, original_size);
-            circle_collider.radius = new_size;
+            float new_magnitude = ComputeSize(lifespan, age.CurrentValue, MinimumMagnitude, original_magnitude);
+            Vector3 new_scale = new_magnitude * normalized_scale;
+            transform.localScale= new_scale;
 
             bool is_faded = age.CurrentValue >= lifespan;
 
@@ -43,13 +45,13 @@ namespace Assets.Scripts
                 Destroy(gameObject);
             }
 
-            static float ComputeColliderSize
-                (float lifespan, float age, float minimum_size, float original_size)
+            static float ComputeSize
+                (float lifespan, float age, float minimum_magnitude, float original_magnitude)
             {
                 float percentage_time_passed = Mathf.InverseLerp(0f, lifespan, age);
-                float size = Mathf.Lerp(original_size, minimum_size, percentage_time_passed);
+                float magnitude = Mathf.Lerp(original_magnitude, minimum_magnitude, percentage_time_passed);
 
-                return size;
+                return magnitude;
             }
         }
     }
