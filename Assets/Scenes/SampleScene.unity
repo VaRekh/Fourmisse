@@ -380,6 +380,22 @@ PrefabInstance:
       propertyPath: anthill
       value: 
       objectReference: {fileID: 1459043933}
+    - target: {fileID: 6982027479660501772, guid: 356c095447a1f04449beaddf70a9f7e0, type: 3}
+      propertyPath: direction_change_per_second
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6982027479660501773, guid: 356c095447a1f04449beaddf70a9f7e0, type: 3}
+      propertyPath: info.pheromone
+      value: 
+      objectReference: {fileID: 3796975487214387578, guid: 35e04e02dac3204458ede0ae4d321683, type: 3}
+    - target: {fileID: 6982027479660501773, guid: 356c095447a1f04449beaddf70a9f7e0, type: 3}
+      propertyPath: pheromone_per_second
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6982027479660501773, guid: 356c095447a1f04449beaddf70a9f7e0, type: 3}
+      propertyPath: info.pheromone_per_second
+      value: 0.25
+      objectReference: {fileID: 0}
     - target: {fileID: 6982027479660501774, guid: 356c095447a1f04449beaddf70a9f7e0, type: 3}
       propertyPath: m_Name
       value: fourmi

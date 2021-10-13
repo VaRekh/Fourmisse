@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine.Assertions;
 
 namespace Assets.Library.StateMachines.Collector
 {
@@ -23,6 +24,8 @@ namespace Assets.Library.StateMachines.Collector
                 default:
                     break;
             }
+
+            Assert.IsNotNull(state);
 
             return state;
         }

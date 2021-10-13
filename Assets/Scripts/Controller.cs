@@ -5,6 +5,7 @@ using Assets.Library.StateMachines;
 using SeekerStateCode = Assets.Library.StateMachines.Seeker.StateCode;
 using SeekerFactory = Assets.Library.StateMachines.Seeker.Factory;
 using Assets.Library;
+using UnityEngine.Events;
 
 namespace Assets.Scripts
 {
@@ -23,13 +24,15 @@ namespace Assets.Scripts
 
         private Rigidbody2D rb;
         private Stopwatch stopwatch;
-        private Collector collector;
 
         private Action Move;
 
         private Vector2Generator vector_generator;
 
         private Updater<SeekerStateCode, ControllerInfo> seeker_updater;
+
+        public UnityEvent<SeekerStateCode> SeekerStateChanged
+            => seeker_updater.StateChanged;
 
         private float DirectionChangeInterval
             => 1f / direction_change_per_second;
@@ -39,7 +42,7 @@ namespace Assets.Scripts
         private void Start()
         {
             rb = GetComponent<Rigidbody2D>();
-            collector = GetComponentInChildren<Collector>();
+            var collector = GetComponentInChildren<Collector>();
 
             Assert.IsNotNull(anthill);
             Assert.IsNotNull(collector);

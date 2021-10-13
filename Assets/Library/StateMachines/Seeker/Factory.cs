@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine.Assertions;
 
 namespace Assets.Library.StateMachines.Seeker
 {
@@ -26,6 +27,8 @@ namespace Assets.Library.StateMachines.Seeker
                 default:
                     break;
             }
+
+            Assert.IsNotNull(state);
 
             return state;
         }
