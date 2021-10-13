@@ -13,8 +13,5 @@ namespace Assets.Library
 
         public static int Convert(T code)
             => (int)(object)code;
-
-        public static T Convert(int value)
-            => (T)(object)value;
     }
 }
