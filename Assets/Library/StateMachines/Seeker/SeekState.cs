@@ -2,9 +2,9 @@
 
 namespace Assets.Library.StateMachines.Seeker
 {
-    public class SeekState : State<StateCode, ControllerInfo>
+    public class SeekState : State<StateCode, SeekerInfo>
     {
-        public SeekState(Updater<StateCode, ControllerInfo> updater, ControllerInfo info)
+        public SeekState(Updater<StateCode, SeekerInfo> updater, SeekerInfo info)
             : base(updater, info)
         { }
 

@@ -3,11 +3,11 @@ using UnityEngine.Assertions;
 
 namespace Assets.Library.StateMachines.Seeker
 {
-    public class Factory : IFactory<StateCode, ControllerInfo>
+    public class Factory : IFactory<StateCode, SeekerInfo>
     {
-        public State<StateCode, ControllerInfo> Get(StateCode code, Updater<StateCode, ControllerInfo> updater, ControllerInfo info)
+        public State<StateCode, SeekerInfo> Get(StateCode code, Updater<StateCode, SeekerInfo> updater, SeekerInfo info)
         {
-            State<StateCode, ControllerInfo> state = null;
+            State<StateCode, SeekerInfo> state = null;
 
 
             switch (code)

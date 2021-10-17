@@ -3,10 +3,10 @@
 
 namespace Assets.Library.StateMachines.Seeker
 {
-    public class DumpState : State<StateCode, ControllerInfo>
+    public class DumpState : State<StateCode, SeekerInfo>
     {
 
-        public DumpState(Updater<StateCode, ControllerInfo> updater, ControllerInfo info)
+        public DumpState(Updater<StateCode, SeekerInfo> updater, SeekerInfo info)
             : base(updater, info)
         { }
 

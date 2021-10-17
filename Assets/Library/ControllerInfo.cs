@@ -1,8 +1,8 @@
-﻿using Assets.Scripts;
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.Events;
-using CollectorStateCode = Assets.Library.StateMachines.Collector.StateCode;
+using UnityEngine.Assertions;
+using SeekerStateCode = Assets.Library.StateMachines.Seeker.StateCode;
 
 namespace Assets.Library
 {
@@ -10,17 +10,61 @@ namespace Assets.Library
     public class ControllerInfo
     {
         [SerializeField]
-        private LayerReference anthill_layer;
+        private float movespeed; //30
         [SerializeField]
-        private UnityEvent<CollectorStateCode> collector_state_changed;
+        private float direction_change_per_second; //0.25
+        [SerializeField]
+        private Transform anthill;
+        [SerializeField][HideInInspector]
+        private Transform ant;
+        [SerializeField][HideInInspector]
+        private Rigidbody2D rigidbody;
+        [SerializeField][HideInInspector]
+        private UnityEvent<SeekerStateCode> seeker_state_changed;
 
-        public LayerReference AnthillLayer
-            => anthill_layer;
+        public float Movespeed
+            => movespeed;
 
-        public UnityEvent<CollectorStateCode> CollectorStateChanged
+        public Vector2 AnthillPosition
         {
-            get => collector_state_changed;
-            set => collector_state_changed = value;
+            get
+            {
+                Assert.IsNotNull(anthill);
+                return anthill.position;
+            }
+        }
+
+        public Transform Ant
+        {
+            set => ant = value;
+        }
+
+        public Vector2 AntPosition
+        {
+            get
+            {
+                Assert.IsNotNull(ant);
+                return ant.position;
+            }
+        }
+
+        public Rigidbody2D Rigidbody
+        {
+            get
+            {
+                Assert.IsNotNull(rigidbody);
+                return rigidbody;
+            }
+            set => rigidbody = value;
+        }
+
+        public float DirectionChangeInterval
+            => 1f / direction_change_per_second;
+
+        public UnityEvent<SeekerStateCode> SeekerStateChanged
+        {
+            get => seeker_state_changed;
+            set => seeker_state_changed = value;
         }
     }
 }

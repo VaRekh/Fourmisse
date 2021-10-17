@@ -15,7 +15,7 @@ namespace Assets.Library
         private float pheromone_per_second;
         [SerializeField]
         private UnityEvent<SeekerStateCode> seeker_state_changed;
-
+        [SerializeField]
         private Transform generation_transform;
 
         public Transform GenerationTransform

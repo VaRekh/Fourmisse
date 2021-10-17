@@ -3,9 +3,9 @@ using CollectorStateCode = Assets.Library.StateMachines.Collector.StateCode;
 
 namespace Assets.Library.StateMachines.Seeker
 {
-    public class ReturnState : State<StateCode, ControllerInfo>
+    public class ReturnState : State<StateCode, SeekerInfo>
     {
-        public ReturnState(Updater<StateCode, ControllerInfo> updater, ControllerInfo info)
+        public ReturnState(Updater<StateCode, SeekerInfo> updater, SeekerInfo info)
             : base(updater, info)
         { }
 
