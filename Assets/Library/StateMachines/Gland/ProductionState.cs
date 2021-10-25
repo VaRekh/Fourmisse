@@ -18,6 +18,7 @@ namespace Assets.Library.StateMachines.Gland
         {
             Updater.StateChanged.Invoke(StateCode.Production);
             Info.SeekerStateChanged.AddListener(ReactToSeekerStateChanged);
+            stopwatch.Reset(Info.GenerationInterval);
         }
 
         public override void Update(float delta_time)
