@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Assets.Scripts;
 
 namespace Assets.Library.StateMachines
 {
@@ -39,6 +40,24 @@ namespace Assets.Library.StateMachines
         public virtual void OnTriggerExit2D(Collider2D collision)
         {
 
+        }
+
+        protected static TComponent GetCollided<TComponent>(Collider2D collision, LayerReference layer)
+            where TComponent : Component
+        {
+
+            int collided_layer = collision.gameObject.layer;
+            int component_layer = layer.Index;
+
+            bool is_layer_collided = collided_layer == component_layer;
+            TComponent component = null;
+
+            if (is_layer_collided)
+            {
+                component = collision.gameObject.GetComponent<TComponent>();
+            }
+
+            return component;
         }
     }
 }
