@@ -49,10 +49,16 @@ namespace Assets.Library.StateMachines
             current_state.Exit();
 
             current_state_code = new_state_code;
-            int current_state_index = Enum<TStateCode>.Convert(current_state_code);;
-            current_state = states[current_state_index];
+            current_state = RetrieveState(current_state_code);
 
             current_state.Enter(data);
+
+            State<TStateCode, TInfo> RetrieveState(TStateCode code)
+            {
+                int state_index = Enum<TStateCode>.Convert(code);
+                State<TStateCode, TInfo> state = states[state_index];
+                return state;
+            }
         }
 
         public void Update(float delta_time)
