@@ -10,12 +10,7 @@ namespace Assets.Library
     public class SeekerInfo
     {
         [SerializeField]
-        private LayerReference anthill_layer;
-        [SerializeField]
         private UnityEvent<CollectorStateCode> collector_state_changed;
-
-        public LayerReference AnthillLayer
-            => anthill_layer;
 
         public UnityEvent<CollectorStateCode> CollectorStateChanged
         {
