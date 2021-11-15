@@ -218,6 +218,10 @@ PrefabInstance:
       value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 1572199201547854604, guid: cd3ed418a6399f44d80c9d7182acb040, type: 3}
+      propertyPath: controller_info.shared_info.movespeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1572199201547854604, guid: cd3ed418a6399f44d80c9d7182acb040, type: 3}
       propertyPath: controller_info.close_range_from_pheromone
       value: 0.25
       objectReference: {fileID: 0}
@@ -239,7 +243,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1572199201547854604, guid: cd3ed418a6399f44d80c9d7182acb040, type: 3}
       propertyPath: controller_info.seek_tactician_info.seconds_before_switching_to_random_move
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1572199201547854605, guid: cd3ed418a6399f44d80c9d7182acb040, type: 3}
       propertyPath: info.pheromone_per_second

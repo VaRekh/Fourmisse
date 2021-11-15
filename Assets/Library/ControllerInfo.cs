@@ -10,23 +10,68 @@ namespace Assets.Library
     [Serializable]
     public class ControllerInfo
     {
+        [Serializable]
+        public class SharedInfo
+        {
+            [SerializeField]
+            private float movespeed;
+
+            private Transform ant;
+            private Rigidbody2D rigidbody;
+
+
+            public float Movespeed
+                => movespeed;
+
+            private Transform Ant
+            {
+                set
+                {
+                    Assert.IsNotNull(value);
+                    ant = value;
+                }
+            }
+
+            public Vector2 AntPosition
+            {
+                get
+                {
+                    Assert.IsNotNull(ant);
+                    return ant.position;
+                }
+            }
+
+            public Rigidbody2D Rigidbody
+            {
+                get => rigidbody;
+                private set
+                {
+                    Assert.IsNotNull(value);
+                    rigidbody = value;
+                }
+            }
+
+            public void Init(Rigidbody2D rigidbody, Transform ant)
+            {
+                Rigidbody = rigidbody;
+                Ant = ant;
+            }
+        }
+
         [SerializeField]
-        private float movespeed;
+        private SharedInfo shared_info;
+
         [SerializeField]
         private SeekTacticianInfo seek_tactician_info;
         [SerializeField]
         private Transform anthill;
-        [SerializeField][HideInInspector]
-        private Transform ant;
-        [SerializeField][HideInInspector]
-        private Rigidbody2D rigidbody;
         [SerializeField][HideInInspector]
         private UnityEvent<SeekerStateCode> seeker_state_changed;
         [SerializeField][HideInInspector]
         private PheromoneDetector pheromone_detector;
 
         public float Movespeed
-            => movespeed;
+            => shared_info.Movespeed;
 
         public SeekTacticianInfo SeekTacticianInfo
             => seek_tactician_info;
@@ -40,54 +85,34 @@ namespace Assets.Library
             }
         }
 
-        public Transform Ant
-        {
-            set
-            {
-                Assert.IsNotNull(value);
-                ant = value;
-                SeekTacticianInfo.Ant = value;
-            }
-        }
-
         public Vector2 AntPosition
-        {
-            get
-            {
-                Assert.IsNotNull(ant);
-                return ant.position;
-            }
-        }
+            => shared_info.AntPosition;
 
         public Rigidbody2D Rigidbody
-        {
-            get => rigidbody;
-            set
-            {
-                Assert.IsNotNull(value);
-                rigidbody = value;
-                SeekTacticianInfo.Rigidbody = value;
-            }
-        }
+            => shared_info.Rigidbody;
 
         public UnityEvent<SeekerStateCode> SeekerStateChanged
         {
             get => seeker_state_changed;
-            set
+            private set
             {
                 Assert.IsNotNull(value);
                 seeker_state_changed = value;
             }
         }
 
-        public PheromoneDetector PheromoneDetector
+        public void Init
+        (
+            Collider2D pheromone_detection_area,
+            Rigidbody2D rigidbody,
+            Transform ant,
+            UnityEvent<SeekerStateCode> seeker_state_changed,
+            PheromoneDetector pheromone_detector
+        )
         {
-            set => SeekTacticianInfo.PheromoneDetector = value;
-        }
-
-        public Collider2D Collider
-        {
-            set => SeekTacticianInfo.Collider = value;
+            shared_info.Init(rigidbody, ant);
+            SeekTacticianInfo.Init(shared_info, pheromone_detection_area, pheromone_detector);
+            SeekerStateChanged = seeker_state_changed;
         }
     }
 }

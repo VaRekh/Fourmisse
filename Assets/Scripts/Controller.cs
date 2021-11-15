@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Assertions;
@@ -20,11 +19,8 @@ namespace Assets.Scripts
         private ControllerInfo controller_info;
         [SerializeField]
         private LayerReference ant_pheromone_detection_layer;
-            
-        private Action Move;
 
         private Updater<ControllerStateCode, ControllerInfo> controller_updater;
-
         private Updater<SeekerStateCode, SeekerInfo> seeker_updater;
 
         public UnityEvent<SeekerStateCode> SeekerStateChanged
@@ -67,11 +63,14 @@ namespace Assets.Scripts
             Assert.IsNotNull(pheromone_detection_area);
 
 
-            controller_info.Collider = pheromone_detection_area;
-            controller_info.Rigidbody = rb;
-            controller_info.Ant = parent_transform;
-            controller_info.SeekerStateChanged = SeekerStateChanged;
-            controller_info.PheromoneDetector = pheromone_detectors[0];
+            controller_info.Init
+            (
+            pheromone_detection_area,
+            rb,
+            parent_transform,
+            SeekerStateChanged,
+            pheromone_detectors[0]
+            );
 
 
             ControllerFactory controller_factory = new ControllerFactory();

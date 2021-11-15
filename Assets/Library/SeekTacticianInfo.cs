@@ -22,6 +22,8 @@ namespace Assets.Library
         }
 
 
+        private ControllerInfo.SharedInfo shared_info;
+
         [SerializeField]
         [Tooltip(
         "Distance from a pheromone which is considered close enough " +
@@ -32,18 +34,21 @@ namespace Assets.Library
         private float direction_change_per_second;
         [SerializeField]
         private float seconds_before_switching_to_random_move;
-        [SerializeField]
-        private float movespeed;
-        [SerializeField][HideInInspector]
-        private Transform ant;
         [SerializeField][HideInInspector]
         private Collider2D collider;
-        [SerializeField][HideInInspector]
-        private Rigidbody2D rigidbody;
         [SerializeField][HideInInspector]
         private PheromoneDetector pheromone_detector;
 
         private readonly HashSet<Pheromone> tracked_pheromones = new HashSet<Pheromone>();
+
+        private ControllerInfo.SharedInfo SharedInfo
+        {
+            set
+            {
+                Assert.IsNotNull(value);
+                shared_info = value;
+            }
+        }
 
         public float CloseRangeFromPheromone
             => close_range_from_pheromone;
@@ -55,30 +60,21 @@ namespace Assets.Library
             => seconds_before_switching_to_random_move;
 
         public float Movespeed
-            => movespeed;
-
-        public Transform Ant
         {
-            set
+            get
             {
-                Assert.IsNotNull(value);
-                ant = value;
+                Assert.IsNotNull(shared_info);
+                return shared_info.Movespeed;
             }
         }
 
         public Vector2 AntPosition
-        {
-            get
-            {
-                Assert.IsNotNull(ant);
-                return ant.position;
-            }
-        }
+            => shared_info.AntPosition;
 
         public Collider2D Collider
         {
             get => collider;
-            set
+            private set
             {
                 Assert.IsNotNull(value);
                 collider = value;
@@ -86,22 +82,22 @@ namespace Assets.Library
         }
 
         public Rigidbody2D Rigidbody
-        {
-            get => rigidbody;
-            set
-            {
-                Assert.IsNotNull(value);
-                rigidbody = value;
-            }
-        }
+            => shared_info.Rigidbody;
 
-        public PheromoneDetector PheromoneDetector
+        private  PheromoneDetector PheromoneDetector
         {
             set
             {
                 Assert.IsNotNull(value);
                 pheromone_detector = value;
             }
+        }
+
+        public void Init(ControllerInfo.SharedInfo shared_info, Collider2D pheromone_detection_area, PheromoneDetector pheromone_detector)
+        {
+            SharedInfo = shared_info;
+            Collider = pheromone_detection_area;
+            PheromoneDetector = pheromone_detector;
         }
 
         public HashSet<Pheromone> TrackedPheromones
