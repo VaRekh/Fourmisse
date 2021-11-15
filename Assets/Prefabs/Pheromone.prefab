@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1302977546628244325}
   - component: {fileID: 3796975487214387576}
   - component: {fileID: 3796975487214387579}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Pheromone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112,5 +112,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6627a307d6ed8d4aa544f84dc0cfd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifespan: 10
+  lifespan: 20
   minimum_size_percentage: 30

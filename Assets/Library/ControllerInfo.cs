@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Assertions;
+using Assets.Scripts;
 using SeekerStateCode = Assets.Library.StateMachines.Seeker.StateCode;
 
 namespace Assets.Library
@@ -10,9 +11,9 @@ namespace Assets.Library
     public class ControllerInfo
     {
         [SerializeField]
-        private float movespeed; //30
+        private float movespeed;
         [SerializeField]
-        private float direction_change_per_second; //0.25
+        private SeekTacticianInfo seek_tactician_info;
         [SerializeField]
         private Transform anthill;
         [SerializeField][HideInInspector]
@@ -21,9 +22,14 @@ namespace Assets.Library
         private Rigidbody2D rigidbody;
         [SerializeField][HideInInspector]
         private UnityEvent<SeekerStateCode> seeker_state_changed;
+        [SerializeField][HideInInspector]
+        private PheromoneDetector pheromone_detector;
 
         public float Movespeed
             => movespeed;
+
+        public SeekTacticianInfo SeekTacticianInfo
+            => seek_tactician_info;
 
         public Vector2 AnthillPosition
         {
@@ -36,7 +42,12 @@ namespace Assets.Library
 
         public Transform Ant
         {
-            set => ant = value;
+            set
+            {
+                Assert.IsNotNull(value);
+                ant = value;
+                SeekTacticianInfo.Ant = value;
+            }
         }
 
         public Vector2 AntPosition
@@ -50,21 +61,33 @@ namespace Assets.Library
 
         public Rigidbody2D Rigidbody
         {
-            get
+            get => rigidbody;
+            set
             {
-                Assert.IsNotNull(rigidbody);
-                return rigidbody;
+                Assert.IsNotNull(value);
+                rigidbody = value;
+                SeekTacticianInfo.Rigidbody = value;
             }
-            set => rigidbody = value;
         }
-
-        public float DirectionChangeInterval
-            => 1f / direction_change_per_second;
 
         public UnityEvent<SeekerStateCode> SeekerStateChanged
         {
             get => seeker_state_changed;
-            set => seeker_state_changed = value;
+            set
+            {
+                Assert.IsNotNull(value);
+                seeker_state_changed = value;
+            }
+        }
+
+        public PheromoneDetector PheromoneDetector
+        {
+            set => SeekTacticianInfo.PheromoneDetector = value;
+        }
+
+        public Collider2D Collider
+        {
+            set => SeekTacticianInfo.Collider = value;
         }
     }
 }

@@ -12,14 +12,15 @@ using ControllerFactory = Assets.Library.StateMachines.Controller.Factory;
 namespace Assets.Scripts
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(Rigidbody2D))]
     public class Controller : MonoBehaviour
     {
         [SerializeField]
         private SeekerInfo seeker_info;
         [SerializeField]
         private ControllerInfo controller_info;
-
+        [SerializeField]
+        private LayerReference ant_pheromone_detection_layer;
+            
         private Action Move;
 
         private Updater<ControllerStateCode, ControllerInfo> controller_updater;
@@ -30,41 +31,53 @@ namespace Assets.Scripts
             => seeker_updater.StateChanged;
 
 
-
-
         // Start is called before the first frame update
         private void Start()
         {
-            var collector = GetComponentInChildren<Collector>();
-            Assert.IsNotNull(collector);
+            Assert.IsNotNull(ant_pheromone_detection_layer);
+            var parent_transform = transform.parent;
+            Assert.IsNotNull(parent_transform);
 
-            seeker_info.CollectorStateChanged = collector.StateChanged;
+            var collectors = parent_transform.GetComponentsInChildren<Collector>();
+            Assert.IsTrue(collectors.Length == 1);
+            seeker_info.CollectorStateChanged = collectors[0].StateChanged;
 
+            var pheromone_detectors = parent_transform.GetComponentsInChildren<PheromoneDetector>();
+            Assert.IsTrue(pheromone_detectors.Length == 1);
 
             SeekerFactory seeker_factory = new SeekerFactory();
             seeker_updater = new Updater<SeekerStateCode, SeekerInfo>(seeker_info, seeker_factory);
 
 
-            var rb = GetComponent<Rigidbody2D>();
+            var rb = GetComponentInParent<Rigidbody2D>();
             Assert.IsNotNull(rb);
 
+            var candidate_colliders = parent_transform.GetComponentsInChildren<Collider2D>();
+
+            Collider2D pheromone_detection_area = null;
+
+            foreach (Collider2D candidate_collider in candidate_colliders)
+            {
+                if (candidate_collider.gameObject.layer == ant_pheromone_detection_layer.Index)
+                {
+                    pheromone_detection_area = candidate_collider;
+                    break;
+                }
+            }
+            Assert.IsNotNull(pheromone_detection_area);
+
+
+            controller_info.Collider = pheromone_detection_area;
             controller_info.Rigidbody = rb;
-            controller_info.Ant = transform;
+            controller_info.Ant = parent_transform;
             controller_info.SeekerStateChanged = SeekerStateChanged;
+            controller_info.PheromoneDetector = pheromone_detectors[0];
 
 
             ControllerFactory controller_factory = new ControllerFactory();
             controller_updater = new Updater<ControllerStateCode, ControllerInfo>(controller_info, controller_factory);
-            controller_updater.StateChanged.AddListener(ReactToControllerStateChanged);
             controller_updater.Start();
             seeker_updater.Start();
-
-
-
-            static void ReactToControllerStateChanged(ControllerStateCode code)
-            {
-                print(Enum.GetName(typeof(ControllerStateCode), code));
-            }
         }
 
 
@@ -72,12 +85,13 @@ namespace Assets.Scripts
         // Update is called once per frame
         private void Update()
         {
+            seeker_updater.Update(Time.deltaTime);
             controller_updater.Update(Time.deltaTime);
         }
 
-        private void OnTriggerEnter2D(Collider2D collision)
+        private void FixedUpdate()
         {
-            seeker_updater.OnTriggerEnter2D(collision);
+            controller_updater.FixedUpdate(Time.fixedDeltaTime);
         }
     }
 }

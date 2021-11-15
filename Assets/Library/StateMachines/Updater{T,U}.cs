@@ -61,6 +61,11 @@ namespace Assets.Library.StateMachines
             }
         }
 
+        public void FixedUpdate(float delta_time)
+        {
+            current_state.FixedUpdate(delta_time);
+        }
+
         public void Update(float delta_time)
         {
             current_state.Update(delta_time);

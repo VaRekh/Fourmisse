@@ -14,9 +14,9 @@ TagManager:
   - AntDetectionResources
   - Resources
   - Anthill
-  - 
-  - 
-  - 
+  - Pheromones
+  - AntDetectionPheromones
+  - Ant
   - 
   - 
   - 

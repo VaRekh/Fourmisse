@@ -16,8 +16,12 @@ namespace Assets.Library.StateMachines
             Info = info;
         }
 
-
         public virtual void Enter(params object[] data)
+        {
+
+        }
+
+        public virtual void FixedUpdate(float delta_time)
         {
 
         }
