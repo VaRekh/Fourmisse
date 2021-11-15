@@ -213,42 +213,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1572199201547854604, guid: cd3ed418a6399f44d80c9d7182acb040, type: 3}
-      propertyPath: controller_info.range_from_pheromone
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 1572199201547854604, guid: cd3ed418a6399f44d80c9d7182acb040, type: 3}
-      propertyPath: controller_info.shared_info.movespeed
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 1572199201547854604, guid: cd3ed418a6399f44d80c9d7182acb040, type: 3}
-      propertyPath: controller_info.close_range_from_pheromone
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 1572199201547854604, guid: cd3ed418a6399f44d80c9d7182acb040, type: 3}
-      propertyPath: controller_info.seek_tactician_info.movespeed
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 1572199201547854604, guid: cd3ed418a6399f44d80c9d7182acb040, type: 3}
-      propertyPath: controller_info.seconds_before_switching_to_random_move
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1572199201547854604, guid: cd3ed418a6399f44d80c9d7182acb040, type: 3}
-      propertyPath: controller_info.seek_tactician_info.close_range_from_pheromone
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1572199201547854604, guid: cd3ed418a6399f44d80c9d7182acb040, type: 3}
-      propertyPath: controller_info.seek_tactician_info.direction_change_per_second
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 1572199201547854604, guid: cd3ed418a6399f44d80c9d7182acb040, type: 3}
-      propertyPath: controller_info.seek_tactician_info.seconds_before_switching_to_random_move
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1572199201547854605, guid: cd3ed418a6399f44d80c9d7182acb040, type: 3}
-      propertyPath: info.pheromone_per_second
-      value: 0.75
-      objectReference: {fileID: 0}
     - target: {fileID: 1572199203428542265, guid: cd3ed418a6399f44d80c9d7182acb040, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -296,10 +260,6 @@ PrefabInstance:
     - target: {fileID: 1572199203428542270, guid: cd3ed418a6399f44d80c9d7182acb040, type: 3}
       propertyPath: m_Name
       value: Ant
-      objectReference: {fileID: 0}
-    - target: {fileID: 7599940612750174743, guid: cd3ed418a6399f44d80c9d7182acb040, type: 3}
-      propertyPath: m_Radius
-      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd3ed418a6399f44d80c9d7182acb040, type: 3}
@@ -367,10 +327,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1805850625, guid: 53ae51b36ba813a459e8c51a1e6df7c1, type: 3}
-      propertyPath: load
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1778288178579054566, guid: 53ae51b36ba813a459e8c51a1e6df7c1, type: 3}
       propertyPath: m_Name
       value: AOEStoneMine
