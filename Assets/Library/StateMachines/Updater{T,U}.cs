@@ -7,7 +7,6 @@ namespace Assets.Library.StateMachines
     public class Updater<TStateCode, TInfo>
         where TStateCode : Enum
     {
-        private TStateCode current_state_code;
         private State<TStateCode, TInfo>current_state;
 
         private readonly State<TStateCode, TInfo>[] states;
@@ -34,8 +33,8 @@ namespace Assets.Library.StateMachines
                 states[state_index] = state;
             }
 
-            current_state_code = default;
-            int current_state_index = Enum<TStateCode>.Convert(current_state_code);
+            CurrentStateCode = default;
+            int current_state_index = Enum<TStateCode>.Convert(CurrentStateCode);
             current_state = states[current_state_index];
 
             StateChanged = new UnityEvent<TStateCode>();
@@ -50,8 +49,8 @@ namespace Assets.Library.StateMachines
         {
             current_state.Exit();
 
-            current_state_code = new_state_code;
-            current_state = RetrieveState(current_state_code);
+            CurrentStateCode = new_state_code;
+            current_state = RetrieveState(CurrentStateCode);
 
             current_state.Enter(data);
 
