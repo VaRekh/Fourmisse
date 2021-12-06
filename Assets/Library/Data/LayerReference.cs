@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts
+namespace Assets.Library.Data
 {
     [CreateAssetMenu(menuName= "Custom scriptable objects/Layer reference", fileName="LayerReference")]
     public class LayerReference : ScriptableObject

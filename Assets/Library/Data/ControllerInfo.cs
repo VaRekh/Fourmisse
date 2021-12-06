@@ -2,10 +2,10 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Assertions;
-using Assets.Scripts;
+using Assets.Library.StateMachines;
 using SeekerStateCode = Assets.Library.StateMachines.Seeker.StateCode;
 
-namespace Assets.Library
+namespace Assets.Library.Data
 {
     [Serializable]
     public class ControllerInfo
@@ -66,9 +66,9 @@ namespace Assets.Library
         [SerializeField]
         private Transform anthill;
         [SerializeField][HideInInspector]
-        private UnityEvent<SeekerStateCode> seeker_state_changed;
-        [SerializeField][HideInInspector]
-        private PheromoneDetector pheromone_detector;
+        private Detector pheromone_detector;
+
+        private Updater<SeekerStateCode, SeekerInfo> seeker;
 
         public float Movespeed
             => shared_info.Movespeed;
@@ -91,28 +91,33 @@ namespace Assets.Library
         public Rigidbody2D Rigidbody
             => shared_info.Rigidbody;
 
-        public UnityEvent<SeekerStateCode> SeekerStateChanged
+        private Updater<SeekerStateCode, SeekerInfo> Seeker
         {
-            get => seeker_state_changed;
-            private set
+            set
             {
                 Assert.IsNotNull(value);
-                seeker_state_changed = value;
+                seeker = value;
             }
         }
+
+        public SeekerStateCode SeekerCurrentState
+            => seeker.CurrentStateCode;
+
+        public UnityEvent<SeekerStateCode> SeekerStateChanged
+            => seeker.StateChanged;
 
         public void Init
         (
             Collider2D pheromone_detection_area,
             Rigidbody2D rigidbody,
             Transform ant,
-            UnityEvent<SeekerStateCode> seeker_state_changed,
-            PheromoneDetector pheromone_detector
+            Updater<SeekerStateCode, SeekerInfo> seeker,
+            Detector pheromone_detector
         )
         {
+            Seeker = seeker;
             shared_info.Init(rigidbody, ant);
             SeekTacticianInfo.Init(shared_info, pheromone_detection_area, pheromone_detector);
-            SeekerStateChanged = seeker_state_changed;
         }
     }
 }

@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!4 &319826985 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6807545298386445192, guid: f31bd134e71cba94291bcf152f9a0d47, type: 3}
+  m_PrefabInstance: {fileID: 1931013622}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -213,6 +218,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1572199201547854604, guid: cd3ed418a6399f44d80c9d7182acb040, type: 3}
+      propertyPath: info.anthill
+      value: 
+      objectReference: {fileID: 319826985}
     - target: {fileID: 1572199203428542265, guid: cd3ed418a6399f44d80c9d7182acb040, type: 3}
       propertyPath: m_RootOrder
       value: 3

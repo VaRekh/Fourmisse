@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine.Assertions;
+using Assets.Library.Data;
 
 namespace Assets.Library.StateMachines.Seeker
 {

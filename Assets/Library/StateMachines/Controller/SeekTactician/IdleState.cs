@@ -1,4 +1,4 @@
-﻿using Assets.Scripts;
+﻿using Assets.Library.Data;
 
 namespace Assets.Library.StateMachines.Controller.SeekTactician
 {
@@ -17,7 +17,7 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician
 
         public override void Update(float delta_time)
         {
-            Pheromone nearest_pheromone = Info.GetNearestPheromone(Info.DetectedPheromones);
+            Entity nearest_pheromone = Info.GetNearestPheromone(Info.DetectedPheromones);
 
             if (nearest_pheromone == null)
             {

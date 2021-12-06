@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using Assets.Scripts;
 using UnityEngine.Assertions;
+using Assets.Library.Data;
 
 namespace Assets.Library.StateMachines.Collector
 {

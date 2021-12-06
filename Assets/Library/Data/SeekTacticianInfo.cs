@@ -2,10 +2,9 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Assertions;
-using Assets.Scripts;
 using System.Collections.Generic;
 
-namespace Assets.Library
+namespace Assets.Library.Data
 {
     [Serializable]
     public class SeekTacticianInfo
@@ -37,9 +36,9 @@ namespace Assets.Library
         [SerializeField][HideInInspector]
         private Collider2D collider;
         [SerializeField][HideInInspector]
-        private PheromoneDetector pheromone_detector;
+        private Detector pheromone_detector;
 
-        private readonly HashSet<Pheromone> tracked_pheromones = new HashSet<Pheromone>();
+        private readonly HashSet<Entity> tracked_pheromones = new HashSet<Entity>();
 
         private ControllerInfo.SharedInfo SharedInfo
         {
@@ -84,7 +83,7 @@ namespace Assets.Library
         public Rigidbody2D Rigidbody
             => shared_info.Rigidbody;
 
-        private  PheromoneDetector PheromoneDetector
+        private  Detector PheromoneDetector
         {
             set
             {
@@ -93,59 +92,59 @@ namespace Assets.Library
             }
         }
 
-        public void Init(ControllerInfo.SharedInfo shared_info, Collider2D pheromone_detection_area, PheromoneDetector pheromone_detector)
+        public void Init(ControllerInfo.SharedInfo shared_info, Collider2D pheromone_detection_area, Detector pheromone_detector)
         {
             SharedInfo = shared_info;
             Collider = pheromone_detection_area;
             PheromoneDetector = pheromone_detector;
         }
 
-        public HashSet<Pheromone> TrackedPheromones
+        public HashSet<Entity> TrackedPheromones
             => tracked_pheromones;
 
-        public UnityEvent<Pheromone, List<Pheromone>> PheromoneAppeared
+        public UnityEvent<Entity, List<Entity>> PheromoneAppeared
         {
             get
             {
                 Assert.IsNotNull(pheromone_detector);
-                return pheromone_detector.PheromoneAppeared;
+                return pheromone_detector.EntityAppeared;
             }
         }
 
-        public UnityEvent<Pheromone, List<Pheromone>> PheromoneVanished
+        public UnityEvent<Entity, List<Entity>> PheromoneVanished
         {
             get
             {
                 Assert.IsNotNull(pheromone_detector);
-                return pheromone_detector.PheromoneVanished;
+                return pheromone_detector.EntityVanished;
             }
         }
 
-        public List<Pheromone> DetectedPheromones
+        public List<Entity> DetectedPheromones
         {
             get
             {
                 Assert.IsNotNull(pheromone_detector);
-                return pheromone_detector.DetectedPheromonesAsList;
+                return pheromone_detector.DetectedEntitiesAsList;
             }
         }
 
-        public void AddToTrackedPheromones(Pheromone pheromone)
+        public void AddToTrackedPheromones(Entity pheromone)
             => TrackedPheromones.Add(pheromone);
 
         public void ClearTrackedPheromones()
             => TrackedPheromones.Clear();
 
-        public Pheromone GetNearestPheromone(List<Pheromone> pheromones)
+        public Entity GetNearestPheromone(List<Entity> pheromones)
         {
             Vector2 ant_collider_position = Collider.transform.position;
-            Pheromone nearest_pheromone = pheromone_detector.GetNearestPheromone(pheromones, ant_collider_position);
+            Entity nearest_pheromone = pheromone_detector.GetNearestEntity(pheromones, ant_collider_position);
             return nearest_pheromone;
         }
 
-        public List<Pheromone> GetUntrackedPheromones(List<Pheromone> pheromones, HashSet<Pheromone> tracked_pheromones)
+        public List<Entity> GetUntrackedPheromones(List<Entity> pheromones, HashSet<Entity> tracked_pheromones)
         {
-            List<Pheromone> untracked_pheromones = pheromone_detector.GetUntrackedPheromones(pheromones, tracked_pheromones);
+            List<Entity> untracked_pheromones = pheromone_detector.GetUntrackedEntities(pheromones, tracked_pheromones);
             return untracked_pheromones;
         }
     }

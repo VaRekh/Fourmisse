@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using Assets.Scripts;
+using Assets.Library.Data;
 
 namespace Assets.Library.StateMachines
 {
@@ -36,32 +36,23 @@ namespace Assets.Library.StateMachines
 
         }
 
-        public virtual void OnTriggerEnter2D(Collider2D collision)
+        public virtual void OnTriggerEnter2D(Collider2D collision, params object[] data)
         {
 
         }
 
-        public virtual void OnTriggerExit2D(Collider2D collision)
+        public virtual void OnTriggerExit2D(Collider2D collision, params object[] data)
         {
 
         }
 
-        protected static TComponent GetCollided<TComponent>(Collider2D collision, LayerReference layer)
-            where TComponent : Component
+        protected static bool CheeckLayer(GameObject game_object, LayerReference layer)
         {
-
-            int collided_layer = collision.gameObject.layer;
+            int collided_layer = game_object.layer;
             int component_layer = layer.Index;
+            bool is_same_layer = collided_layer == component_layer;
 
-            bool is_layer_collided = collided_layer == component_layer;
-            TComponent component = null;
-
-            if (is_layer_collided)
-            {
-                component = collision.gameObject.GetComponent<TComponent>();
-            }
-
-            return component;
+            return is_same_layer;
         }
     }
 }

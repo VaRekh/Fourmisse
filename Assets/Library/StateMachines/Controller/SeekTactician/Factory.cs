@@ -1,5 +1,6 @@
 ﻿using UnityEngine.Assertions;
 using TacticianStateCode = Assets.Library.StateMachines.Controller.SeekTactician.StateCode;
+using Assets.Library.Data;
 
 namespace Assets.Library.StateMachines.Controller.SeekTactician
 {

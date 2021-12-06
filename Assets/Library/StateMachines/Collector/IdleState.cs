@@ -1,5 +1,6 @@
-﻿using Assets.Scripts;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Assertions;
+using Assets.Library.Data;
 
 namespace Assets.Library.StateMachines.Collector
 {
@@ -14,22 +15,20 @@ namespace Assets.Library.StateMachines.Collector
             Updater.StateChanged.Invoke(StateCode.Idle);
         }
 
-        public override void OnTriggerEnter2D(Collider2D collision)
+        public override void OnTriggerEnter2D(Collider2D collision, params object[] data)
         {
-            var collectable = GetCollided<Collectable>(collision, Info.ResourceLayer);
+            Assert.IsTrue(data.Length == 1);
 
-            if (collectable != null)
+            switch(data[0])
             {
-                Updater.Change(StateCode.Collect, collectable);
-            }
-            else
-            {
-                var anthill = GetCollided<Anthill>(collision, Info.AnthillLayer);
-
-                if (anthill != null)
-                {
-                    Updater.Change(StateCode.Dump, anthill);
-                }
+                case Collectable collectable:
+                    Updater.Change(StateCode.Collect, collectable);
+                    break;
+                case Storage storage:
+                    Updater.Change(StateCode.Dump, storage);
+                    break;
+                default:
+                    break;
             }
         }
     }

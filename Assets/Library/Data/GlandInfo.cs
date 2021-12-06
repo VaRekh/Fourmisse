@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 using SeekerStateCode = Assets.Library.StateMachines.Seeker.StateCode;
 
-namespace Assets.Library
+namespace Assets.Library.Data
 {
     [Serializable]
     public class GlandInfo

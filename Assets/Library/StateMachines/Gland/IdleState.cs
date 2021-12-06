@@ -1,4 +1,5 @@
 ﻿using SeekerStateCode = Assets.Library.StateMachines.Seeker.StateCode;
+using Assets.Library.Data;
 
 namespace Assets.Library.StateMachines.Gland
 {

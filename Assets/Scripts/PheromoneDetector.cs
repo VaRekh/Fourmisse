@@ -1,7 +1,5 @@
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.Assertions;
-using System.Collections.Generic;
 using Assets.Library;
 
 namespace Assets.Scripts
@@ -10,44 +8,44 @@ namespace Assets.Scripts
     [RequireComponent(typeof(Collider2D))]
     public class PheromoneDetector : MonoBehaviour
     {
+        /*
         private HashSet<Pheromone> DetectedPheromones { get; set; }
         public UnityEvent<Pheromone, List<Pheromone>> PheromoneAppeared { get; private set; }
         public UnityEvent<Pheromone, List<Pheromone>> PheromoneVanished { get; private set; }
 
         public List<Pheromone> DetectedPheromonesAsList
             => new List<Pheromone>(DetectedPheromones);
+        */
+        private Detector detector;
+
+        public Detector Detector
+            => detector;
 
         private void Start()
         {
-            PheromoneAppeared = new UnityEvent<Pheromone, List<Pheromone>>();
-            DetectedPheromones = new HashSet<Pheromone>();
-            PheromoneVanished = new UnityEvent<Pheromone, List<Pheromone>>();
+            detector = new Detector();
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
             var pheromone = collision.gameObject.GetComponent<Pheromone>();
             Assert.IsNotNull(pheromone);
+            var entity = pheromone.Entity;
+            Assert.IsNotNull(entity);
 
-            bool is_element_added = DetectedPheromones.Add(pheromone);
-            if (is_element_added)
-            {
-                PheromoneAppeared.Invoke(pheromone, DetectedPheromonesAsList);
-            }
+            detector.AddAppearingEntity(entity);
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
             var pheromone = collision.gameObject.GetComponent<Pheromone>();
             Assert.IsNotNull(pheromone);
+            var entity = pheromone.Entity;
+            Assert.IsNotNull(entity);
 
-            bool is_element_removed = DetectedPheromones.Remove(pheromone);
-            if (is_element_removed)
-            {
-                 PheromoneVanished.Invoke(pheromone, DetectedPheromonesAsList);
-            }
+            detector.RemoveVanishingEntity(entity);
         }
-
+        /*
         public Pheromone GetNearestPheromone(List<Pheromone> pheromones, Vector2 ant_collider_position)
         {
             Assert.IsNotNull(pheromones);
@@ -93,6 +91,6 @@ namespace Assets.Scripts
             }
 
             return untracked_pheromones;
-        }
+        }*/
     }
 }

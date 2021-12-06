@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
-using Assets.Library;
+using Assets.Library.Data;
 using Assets.Library.StateMachines;
 using Assets.Library.StateMachines.Collector;
 using CollectorFactory = Assets.Library.StateMachines.Collector.Factory;
@@ -39,7 +39,18 @@ namespace Assets.Scripts
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            collect_updater.OnTriggerEnter2D(collision);
+            var resource = collision.gameObject.GetComponent<Resource>();
+
+            object data = resource?.Collectable;
+
+            if (data == null)
+            {
+                var anthill = collision.gameObject.GetComponent<Anthill>();
+
+                data = anthill?.Storage;
+            }
+
+            collect_updater.OnTriggerEnter2D(collision, data);
         }
 
         private void OnTriggerExit2D(Collider2D collision)

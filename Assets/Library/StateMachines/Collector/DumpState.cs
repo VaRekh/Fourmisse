@@ -1,11 +1,11 @@
-﻿using Assets.Scripts;
-using UnityEngine.Assertions;
+﻿using UnityEngine.Assertions;
+using Assets.Library.Data;
 
 namespace Assets.Library.StateMachines.Collector
 {
     public class DumpState : State<StateCode, CollectorInfo>
     {
-        private Anthill anthill;
+        private Storage storage;
         
         public DumpState(Updater<StateCode, CollectorInfo> updater, CollectorInfo info)
             : base(updater, info)
@@ -17,21 +17,21 @@ namespace Assets.Library.StateMachines.Collector
 
             bool is_data_available = data.Length > 0;
             Assert.IsTrue(is_data_available);
-            anthill = null;
-            anthill = GetAnthill(data[0]);
+            storage = null;
+            storage = GetStorage(data[0]);
 
-            static Anthill GetAnthill(object data)
+            static Storage GetStorage(object data)
             {
-                Anthill anthill_found = data as Anthill;
-                Assert.IsNotNull(anthill_found);
+                Storage storage_found = data as Storage;
+                Assert.IsNotNull(storage_found);
 
-                return anthill_found;
+                return storage_found;
             }
         }
 
         public override void Update(float delta_time)
         {
-            anthill.Store(Info.Load.CurrentValue);
+            storage.Store(Info.Load.CurrentValue);
             Info.Load.CurrentValue = 0U;
 
             Updater.Change(StateCode.Idle);

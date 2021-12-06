@@ -1,8 +1,7 @@
 ﻿using System;
 using UnityEngine;
-using Assets.Scripts;
 
-namespace Assets.Library
+namespace Assets.Library.Data
 {
     [Serializable]
     public class CollectorInfo

@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
 using SeekerStateCode = Assets.Library.StateMachines.Seeker.StateCode;
+using Assets.Library.Data;
 
 namespace Assets.Library.StateMachines.Gland
 {
     public class ProductionState : State<StateCode, GlandInfo>
     {
-        private Stopwatch stopwatch;
+        private readonly Stopwatch stopwatch;
 
         public ProductionState(Updater<StateCode, GlandInfo> updater, GlandInfo info)
             : base(updater, info)

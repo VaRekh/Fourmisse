@@ -12,7 +12,9 @@ namespace Assets.Library.StateMachines
 
         private readonly State<TStateCode, TInfo>[] states;
 
-        public UnityEvent<TStateCode> StateChanged;
+        public TStateCode CurrentStateCode { get; private set; }
+
+        public UnityEvent<TStateCode> StateChanged { get; }
 
         public Updater
         (
@@ -71,14 +73,14 @@ namespace Assets.Library.StateMachines
             current_state.Update(delta_time);
         }
 
-        public void OnTriggerEnter2D(Collider2D collision)
+        public void OnTriggerEnter2D(Collider2D collision, params object[] data)
         {
-            current_state.OnTriggerEnter2D(collision);
+            current_state.OnTriggerEnter2D(collision, data);
         }
 
-        public void OnTriggerExit2D(Collider2D collision)
+        public void OnTriggerExit2D(Collider2D collision, params object[] data)
         {
-            current_state.OnTriggerExit2D(collision);
+            current_state.OnTriggerExit2D(collision, data);
         }
     }
 }

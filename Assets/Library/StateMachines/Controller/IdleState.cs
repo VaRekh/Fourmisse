@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-
 using SeekerStateCode = Assets.Library.StateMachines.Seeker.StateCode;
+using Assets.Library.Data;
 
 namespace Assets.Library.StateMachines.Controller
 {
@@ -16,6 +16,7 @@ namespace Assets.Library.StateMachines.Controller
             Info.SeekerStateChanged.AddListener(ReactToSeekerStateChanged);
 
             Info.Rigidbody.ChangeDirection(0f, Vector2.zero);
+            ReactToSeekerStateChanged(Info.SeekerCurrentState);
         }
 
         public override void Exit()

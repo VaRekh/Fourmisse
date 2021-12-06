@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
 using System.Collections.Generic;
-using Assets.Scripts;
+using Assets.Library.Data;
 
 namespace Assets.Library.StateMachines.Controller.SeekTactician
 {
@@ -58,7 +58,7 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician
             Info.PheromoneAppeared.RemoveListener(ReactToPheromoneAppeared);
         }
 
-        private void ReactToPheromoneAppeared(Pheromone pheromone, List<Pheromone> pheromones)
+        private void ReactToPheromoneAppeared(Entity pheromone, List<Entity> pheromones)
         {
             bool has_pheromone_been_tracked = Info.TrackedPheromones.Contains(pheromone);
             if (!has_pheromone_been_tracked)

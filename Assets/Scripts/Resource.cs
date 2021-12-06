@@ -1,19 +1,21 @@
 using UnityEngine;
 using Assets.Library;
 
+
 namespace Assets.Scripts
 {
     [DisallowMultipleComponent]
-    public class Anthill : MonoBehaviour
+    [RequireComponent(typeof(Collider2D))]
+    public class Resource : MonoBehaviour
     {
         [SerializeField]
         private uint load;
 
-        public Storage Storage { get; private set; }
+        public Collectable Collectable { get; private set; }
 
         private void Start()
         {
-            Storage = new Storage(load);
+            Collectable = new Collectable(load);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using SeekerStateCode = Assets.Library.StateMachines.Seeker.StateCode;
 using TacticianStateCode = Assets.Library.StateMachines.Controller.SeekTactician.StateCode;
 using TacticianFactory = Assets.Library.StateMachines.Controller.SeekTactician.Factory;
+using Assets.Library.Data;
 
 namespace Assets.Library.StateMachines.Controller
 {

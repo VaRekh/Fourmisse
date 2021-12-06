@@ -1,10 +1,9 @@
-﻿using Assets.Scripts;
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.Events;
 using CollectorStateCode = Assets.Library.StateMachines.Collector.StateCode;
 
-namespace Assets.Library
+namespace Assets.Library.Data
 {
     [Serializable]
     public class SeekerInfo

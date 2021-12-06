@@ -1,4 +1,5 @@
 ﻿using CollectorStateCode = Assets.Library.StateMachines.Collector.StateCode;
+using Assets.Library.Data;
 
 
 namespace Assets.Library.StateMachines.Seeker

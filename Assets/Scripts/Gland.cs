@@ -1,6 +1,5 @@
 using UnityEngine;
-using Assets.Library;
-
+using Assets.Library.Data;
 using Assets.Library.StateMachines;
 using GlandStateCode = Assets.Library.StateMachines.Gland.StateCode;
 using GlandFactory = Assets.Library.StateMachines.Gland.Factory;
@@ -8,7 +7,7 @@ using GlandFactory = Assets.Library.StateMachines.Gland.Factory;
 namespace Assets.Scripts
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(Controller))]
+    [RequireComponent(typeof(Seeker))]
     public class Gland : MonoBehaviour
     {
         [SerializeField]
@@ -18,8 +17,8 @@ namespace Assets.Scripts
 
         private void Start()
         {
-            var controller = GetComponent<Controller>();
-            info.SeekerStateChanged = controller.SeekerStateChanged;
+            var seeker = GetComponent<Seeker>();
+            info.SeekerStateChanged = seeker.StateChanged;
             info.GenerationTransform = transform;
 
             GlandFactory gland_factory = new GlandFactory();
