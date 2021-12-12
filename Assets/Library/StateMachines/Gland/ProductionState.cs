@@ -26,12 +26,11 @@ namespace Assets.Library.StateMachines.Gland
         {
             stopwatch.Update(delta_time);
             Assert.IsNotNull(Info.Pheromone);
-            Assert.IsNotNull(Info.GenerationTransform);
             bool is_time_to_generate = stopwatch.CurrentValue >= Info.GenerationInterval;
 
             if (is_time_to_generate)
             {
-                Object.Instantiate(Info.Pheromone, Info.GenerationTransform.position, Info.Pheromone.transform.rotation);
+                Object.Instantiate(Info.Pheromone, Info.GenerationPosition, Info.Pheromone.transform.rotation);
                 stopwatch.Reset();
             }
         }

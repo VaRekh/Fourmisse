@@ -1,4 +1,7 @@
 using UnityEngine;
+using UnityEngine.Events;
+
+using Assets.Library;
 using Assets.Library.Data;
 using Assets.Library.StateMachines;
 using GlandStateCode = Assets.Library.StateMachines.Gland.StateCode;
@@ -19,11 +22,17 @@ namespace Assets.Scripts
         {
             var seeker = GetComponent<Seeker>();
             info.SeekerStateChanged = seeker.StateChanged;
-            info.GenerationTransform = transform;
-
+            GlandInfo TEMPINFO = new GlandInfo
+            (
+                info.GeneratedPheromonePerSecond,
+                transform,
+                info.Pheromone,
+                new UnityEvent<Collectable>(), // ATTENTION !
+                new UnityEvent<Storage>()
+            );
             GlandFactory gland_factory = new GlandFactory();
 
-            gland_updater = new Updater<GlandStateCode, GlandInfo>(info, gland_factory);
+            gland_updater = new Updater<GlandStateCode, GlandInfo>(TEMPINFO, gland_factory);
             gland_updater.Start();
         }
 
