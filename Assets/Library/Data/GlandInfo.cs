@@ -20,13 +20,11 @@ namespace Assets.Library.Data
             UnityEvent<Storage> contact_with_storage_happened
         )
         {
-            if (generation_position == null ||
-                contact_with_collectable_lost == null ||
-                contact_with_storage_happened == null ||
-                pheromone_template == null)
-            {
-                throw new ArgumentNullException();
-            }
+            Assert.IsNotNull(generation_position);
+            Assert.IsNotNull(pheromone_template);
+            Assert.IsNotNull(contact_with_collectable_lost);
+            Assert.IsNotNull(contact_with_storage_happened);
+
             GeneratedPheromonePerSecond = generated_pheromone_per_second;
             GenerationTransform = generation_position;
             ContactWithCollectableLost = contact_with_collectable_lost;

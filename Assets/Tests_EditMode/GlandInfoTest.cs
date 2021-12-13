@@ -4,6 +4,8 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.Events;
 
+using UnityAssertionException = UnityEngine.Assertions.AssertionException;
+
 using Assets.Library;
 using SeekerStateCode = Assets.Library.StateMachines.Seeker.StateCode;
 using Assets.Library.Data;
@@ -125,7 +127,7 @@ namespace Tests.Library.Data
             var parameters = MakeDefaultParameters();
             var info = MakeGlandInfo(parameters);
 
-            info.ListenToLossOfContactWithCollectable(OnLossOfContact);
+            parameters.ContactWithCollectableLost.AddListener(OnLossOfContact);
             info.StopListeningToLossOfContactWithCollectable(OnLossOfContact);
             bool reacted_to_event = false;
 
@@ -162,7 +164,7 @@ namespace Tests.Library.Data
             var parameters = MakeDefaultParameters();
             var info = MakeGlandInfo(parameters);
 
-            info.ListenToContactWithStorage(OnContact);
+            parameters.ContactWithStorageHappened.AddListener(OnContact);
             info.StopListeningToContactWithStorage(OnContact);
             bool reacted_to_event = false;
 
@@ -186,9 +188,11 @@ namespace Tests.Library.Data
                 PheromoneTemplate = new GameObject()
             };
 
-            Assert.Throws<ArgumentNullException>
+            Assert.That
             (
-                () => { MakeGlandInfo(parameters); }
+                () => { MakeGlandInfo(parameters); },
+                Throws  .InstanceOf<UnityAssertionException>()
+                        .With.Message.Contains("Value was Null")
             );
         }
 
@@ -203,9 +207,11 @@ namespace Tests.Library.Data
                 PheromoneTemplate = new GameObject()
             };
 
-            Assert.Throws<ArgumentNullException>
+            Assert.That
             (
-                () => { MakeGlandInfo(parameters); }
+                () => { MakeGlandInfo(parameters); },
+                Throws.InstanceOf<UnityAssertionException>()
+                        .With.Message.Contains("Value was Null")
             );
         }
 
@@ -220,9 +226,11 @@ namespace Tests.Library.Data
                 PheromoneTemplate = new GameObject()
             };
 
-            Assert.Throws<ArgumentNullException>
+            Assert.That
             (
-                () => { MakeGlandInfo(parameters); }
+                () => { MakeGlandInfo(parameters); },
+                Throws.InstanceOf<UnityAssertionException>()
+                        .With.Message.Contains("Value was Null")
             );
         }
 
@@ -237,9 +245,11 @@ namespace Tests.Library.Data
                 ContactWithStorageHappened = new UnityEvent<Storage>()
             };
 
-            Assert.Throws<ArgumentNullException>
+            Assert.That
             (
-                () => { MakeGlandInfo(parameters); }
+                () => { MakeGlandInfo(parameters); },
+                Throws.InstanceOf<UnityAssertionException>()
+                        .With.Message.Contains("Value was Null")
             );
         }
     }
