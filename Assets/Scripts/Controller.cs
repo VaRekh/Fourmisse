@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Assertions;
-using Assets.Library.Data;
+using Assets.Library;
+using Assets.Library.StateMachines.Controller;
 using Assets.Library.StateMachines;
 using ControllerStateCode = Assets.Library.StateMachines.Controller.StateCode;
 using ControllerFactory = Assets.Library.StateMachines.Controller.Factory;

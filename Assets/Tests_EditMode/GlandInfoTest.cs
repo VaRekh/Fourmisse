@@ -1,5 +1,4 @@
 #nullable enable
-using System;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.Events;
@@ -7,7 +6,7 @@ using UnityEngine.Events;
 using UnityAssertionException = UnityEngine.Assertions.AssertionException;
 
 using Assets.Library;
-using Assets.Library.Data;
+using Assets.Library.StateMachines.Gland;
 
 namespace Tests.Library.Data
 {

@@ -1,6 +1,7 @@
 ﻿using UnityEngine.Assertions;
 using TacticianStateCode = Assets.Library.StateMachines.Controller.SeekTactician.StateCode;
 using Assets.Library.Data;
+using Assets.Library.StateMachines.Controller.SeekTactician.States;
 
 namespace Assets.Library.StateMachines.Controller.SeekTactician
 {
@@ -19,7 +20,7 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician
             switch (code)
             {
                  case TacticianStateCode.Idle:
-                    state = new SeekTactician.IdleState(updater, info);
+                    state = new IdleState(updater, info);
                     break;
                 case TacticianStateCode.RandomMove:
                     state = new RandomMoveState(updater, info);

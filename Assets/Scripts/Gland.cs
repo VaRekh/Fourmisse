@@ -2,8 +2,8 @@ using UnityEngine;
 using UnityEngine.Events;
 
 using Assets.Library;
-using Assets.Library.Data;
 using Assets.Library.StateMachines;
+using Assets.Library.StateMachines.Gland;
 using GlandStateCode = Assets.Library.StateMachines.Gland.StateCode;
 using GlandFactory = Assets.Library.StateMachines.Gland.Factory;
 
