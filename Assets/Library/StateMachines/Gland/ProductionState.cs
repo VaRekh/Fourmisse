@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿#nullable enable
+using UnityEngine;
 using UnityEngine.Assertions;
-using SeekerStateCode = Assets.Library.StateMachines.Seeker.StateCode;
 using Assets.Library.Data;
+using SeekerStateCode = Assets.Library.StateMachines.Seeker.StateCode;
 
 namespace Assets.Library.StateMachines.Gland
 {
@@ -18,38 +19,30 @@ namespace Assets.Library.StateMachines.Gland
         public override void Enter(params object[] data)
         {
             Updater.StateChanged.Invoke(StateCode.Production);
-            Info.SeekerStateChanged.AddListener(ReactToSeekerStateChanged);
-            stopwatch.Reset(Info.GenerationInterval);
+            Info.ListenToContactWithStorage(OnContact);
+            stopwatch.Reset(Info.PheromoneProductionTimeInSecond);
         }
 
         public override void Update(float delta_time)
         {
             stopwatch.Update(delta_time);
-            Assert.IsNotNull(Info.Pheromone);
-            bool is_time_to_generate = stopwatch.CurrentValue >= Info.GenerationInterval;
+            bool is_time_to_generate = stopwatch.CurrentValue >= Info.PheromoneProductionTimeInSecond;
 
             if (is_time_to_generate)
             {
-                Object.Instantiate(Info.Pheromone, Info.GenerationPosition, Info.Pheromone.transform.rotation);
+                Info.InstantiatePheromone();
                 stopwatch.Reset();
             }
         }
 
         public override void Exit()
         {
-            Info.SeekerStateChanged.RemoveListener(ReactToSeekerStateChanged);
+            Info.StopListeningToContactWithStorage(OnContact);
         }
-
-        public void ReactToSeekerStateChanged(SeekerStateCode new_state)
+        
+        private void OnContact(Storage storage)
         {
-            switch (new_state)
-            {
-                case SeekerStateCode.Return:
-                    break;
-                default:
-                    Updater.Change(StateCode.Idle);
-                    break;
-            }
+            Updater.Change(StateCode.Idle);
         }
     }
 }

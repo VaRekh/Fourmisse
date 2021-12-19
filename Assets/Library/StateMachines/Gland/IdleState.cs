@@ -12,24 +12,17 @@ namespace Assets.Library.StateMachines.Gland
         public override void Enter(params object[] data)
         {
             Updater.StateChanged.Invoke(StateCode.Idle);
-            Info.SeekerStateChanged.AddListener(ReactToSeekerStateChanged);
+            Info.ListenToLossOfContactWithCollectable(OnLossOfContact);
         }
 
         public override void Exit()
         {
-            Info.SeekerStateChanged.RemoveListener(ReactToSeekerStateChanged);
+            Info.StopListeningToLossOfContactWithCollectable(OnLossOfContact);
         }
 
-        public void ReactToSeekerStateChanged(SeekerStateCode new_state)
+        private void OnLossOfContact(Collectable collectable)
         {
-            switch (new_state)
-            {
-                case SeekerStateCode.Return:
-                    Updater.Change(StateCode.Production);
-                    break;
-                default:
-                    break;
-            }
+            Updater.Change(StateCode.Production);
         }
     }
 }

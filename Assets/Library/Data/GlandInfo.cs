@@ -27,17 +27,23 @@ namespace Assets.Library.Data
 
             GeneratedPheromonePerSecond = generated_pheromone_per_second;
             GenerationTransform = generation_position;
+            PheromoneTemplate = pheromone_template;
             ContactWithCollectableLost = contact_with_collectable_lost;
             ContactWithStorageHappened = contact_with_storage_happened;
+
+            Assert.IsNotNull(GenerationTransform);
+            Assert.IsNotNull(PheromoneTemplate);
+            Assert.IsNotNull(ContactWithCollectableLost);
+            Assert.IsNotNull(ContactWithStorageHappened);
         }
 
         private Transform GenerationTransform { get; set; }
         private UnityEvent<Collectable> ContactWithCollectableLost { get; set; }
         private UnityEvent<Storage> ContactWithStorageHappened { get; set; }
 
-        public StrictlyPositiveFloat GeneratedPheromonePerSecond { get; private set; }
+        private StrictlyPositiveFloat GeneratedPheromonePerSecond { get; set; }
         
-        public Vector2 GenerationPosition
+        private Vector2 GenerationPosition
             => GenerationTransform.position;
 
         public float PheromoneProductionTimeInSecond
@@ -63,7 +69,17 @@ namespace Assets.Library.Data
             ContactWithStorageHappened.RemoveListener(listener);
         }
 
+        private GameObject PheromoneTemplate { get; set; }
 
+        public GameObject InstantiatePheromone()
+        {
+            return GameObject.Instantiate
+            (
+                PheromoneTemplate,
+                GenerationPosition,
+                PheromoneTemplate.transform.rotation
+            );
+        }
 
 
 

@@ -7,7 +7,6 @@ using UnityEngine.Events;
 using UnityAssertionException = UnityEngine.Assertions.AssertionException;
 
 using Assets.Library;
-using SeekerStateCode = Assets.Library.StateMachines.Seeker.StateCode;
 using Assets.Library.Data;
 
 namespace Tests.Library.Data
@@ -17,7 +16,7 @@ namespace Tests.Library.Data
         private struct GlandInfoConstructorParameters
         {
             public StrictlyPositiveFloat GeneratedPheromonePerSecond { get; set; }
-            public Transform Transform { get; set; }
+            public Transform GenerationTransform { get; set; }
             public GameObject PheromoneTemplate { get; set; }
             public UnityEvent<Collectable> ContactWithCollectableLost { get; set; }
             public UnityEvent<Storage> ContactWithStorageHappened { get; set; }
@@ -35,7 +34,7 @@ namespace Tests.Library.Data
             return new GlandInfoConstructorParameters
             {
                 GeneratedPheromonePerSecond = new StrictlyPositiveFloat(1f),
-                Transform = MakeDefaultTransform(),
+                GenerationTransform = MakeDefaultTransform(),
                 PheromoneTemplate = new GameObject(),
                 ContactWithCollectableLost = new UnityEvent<Collectable>(),
                 ContactWithStorageHappened = new UnityEvent<Storage>()
@@ -47,7 +46,7 @@ namespace Tests.Library.Data
             return new GlandInfo
             (
                 constructor_parameters.GeneratedPheromonePerSecond,
-                constructor_parameters.Transform,
+                constructor_parameters.GenerationTransform,
                 constructor_parameters.PheromoneTemplate,
                 constructor_parameters.ContactWithCollectableLost,
                 constructor_parameters.ContactWithStorageHappened
@@ -68,38 +67,6 @@ namespace Tests.Library.Data
             var info = MakeGlandInfo(parameters);
 
             var actual = info.PheromoneProductionTimeInSecond;
-            Assert.AreEqual(expected, actual);
-        }
-
-        [Test]
-        public void GetGenerationPosition_WhenPositionInTransformIsDefault_ReturnsSamePosition()
-        {
-            var parameters = MakeDefaultParameters();
-            Vector2 expected = parameters.Transform.position;
-
-            var info = MakeGlandInfo(parameters);
-            var actual = info.GenerationPosition;
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestCase(0f, 1f)]
-        [TestCase(4f, 2f)]
-        [TestCase(-2f, 5f)]
-        [TestCase(1f, 0f)]
-        public void GetGenerationPosition_WhenPositionInTransformIsModified_ReturnsModifiedPosition
-        (
-            float x_expected,
-            float y_expected
-        )
-        {
-            var expected = new Vector2(x_expected, y_expected);
-            var parameters = MakeDefaultParameters();
-            var info = MakeGlandInfo(parameters);
-
-            parameters.Transform.position = expected;
-            var actual = info.GenerationPosition;
-
             Assert.AreEqual(expected, actual);
         }
 
@@ -178,6 +145,66 @@ namespace Tests.Library.Data
         }
 
         [Test]
+        public void InstantiatePheromone_ReturnsPheromoneMatchingProvidedParameters()
+        {
+            var parameters = MakeDefaultParameters();
+            var info = MakeGlandInfo(parameters);
+
+            var pheromone = info.InstantiatePheromone();
+
+            Assert.That
+            (
+                pheromone.transform.position,
+                Is.EqualTo(parameters.GenerationTransform.position)
+            );
+
+            Assert.That
+            (
+                pheromone.transform.rotation,
+                Is.EqualTo(parameters.GenerationTransform.rotation)
+            );
+        }
+
+        [Test, Combinatorial]
+        public void InstantiatePheromone_ReturnsPheromoneMatchingPosition
+        (
+            [Values(-2f, 0f, 1f, 5f)] float position_x,
+            [Values(-2f, 0f, 1f, 5f)] float position_y
+        )
+        {
+            var parameters = MakeDefaultParameters();
+            parameters.GenerationTransform.position = new Vector3(position_x, position_y);
+            var info = MakeGlandInfo(parameters);
+
+            var pheromone = info.InstantiatePheromone();
+
+            Assert.That
+            (
+                pheromone.transform.position,
+                Is.EqualTo(parameters.GenerationTransform.position)
+            );
+        }
+
+        [Test]
+        public void InstantiatePheromone_ReturnsPheromoneMatchingRotation
+        (
+            [Values(-25f, 0f, 90f, 180f)] float rotation_z
+        )
+        {
+            var parameters = MakeDefaultParameters();
+            parameters.PheromoneTemplate.transform.rotation = Quaternion.Euler(0f, 0f, rotation_z);
+            var info = MakeGlandInfo(parameters);
+
+            var pheromone = info.InstantiatePheromone();
+
+            Assert.That
+            (
+                pheromone.transform.rotation,
+                Is.EqualTo(parameters.PheromoneTemplate.transform.rotation)
+            );
+        }
+
+        [Test]
         public void WhenConstructorIsCalledWithNullTransform_ThrowsNullArgumentException()
         {
             var parameters = new GlandInfoConstructorParameters
@@ -202,7 +229,7 @@ namespace Tests.Library.Data
             var parameters = new GlandInfoConstructorParameters
             {
                 GeneratedPheromonePerSecond = new StrictlyPositiveFloat(1f),
-                Transform = MakeDefaultTransform(),
+                GenerationTransform = MakeDefaultTransform(),
                 ContactWithStorageHappened = new UnityEvent<Storage>(),
                 PheromoneTemplate = new GameObject()
             };
@@ -221,7 +248,7 @@ namespace Tests.Library.Data
             var parameters = new GlandInfoConstructorParameters
             {
                 GeneratedPheromonePerSecond = new StrictlyPositiveFloat(1f),
-                Transform = MakeDefaultTransform(),
+                GenerationTransform = MakeDefaultTransform(),
                 ContactWithCollectableLost = new UnityEvent<Collectable>(),
                 PheromoneTemplate = new GameObject()
             };
@@ -240,7 +267,7 @@ namespace Tests.Library.Data
             var parameters = new GlandInfoConstructorParameters
             {
                 GeneratedPheromonePerSecond = new StrictlyPositiveFloat(1f),
-                Transform = MakeDefaultTransform(),
+                GenerationTransform = MakeDefaultTransform(),
                 ContactWithCollectableLost = new UnityEvent<Collectable>(),
                 ContactWithStorageHappened = new UnityEvent<Storage>()
             };

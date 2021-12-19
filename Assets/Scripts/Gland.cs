@@ -24,7 +24,7 @@ namespace Assets.Scripts
             info.SeekerStateChanged = seeker.StateChanged;
             GlandInfo TEMPINFO = new GlandInfo
             (
-                info.GeneratedPheromonePerSecond,
+                new StrictlyPositiveFloat(1f / info.GenerationInterval),
                 transform,
                 info.Pheromone,
                 new UnityEvent<Collectable>(), // ATTENTION !
