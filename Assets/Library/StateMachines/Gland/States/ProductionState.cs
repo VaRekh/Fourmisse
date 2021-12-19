@@ -3,11 +3,11 @@ using Assets.Library.Data;
 
 namespace Assets.Library.StateMachines.Gland.States
 {
-    public class ProductionState : State<StateCode, GlandInfo>
+    public class ProductionState : State<StateCode, Info>
     {
         private readonly Stopwatch stopwatch;
 
-        public ProductionState(Updater<StateCode, GlandInfo> updater, GlandInfo info)
+        public ProductionState(Updater<StateCode, Info> updater, Info info)
             : base(updater, info)
         {
             stopwatch = new Stopwatch(0f);

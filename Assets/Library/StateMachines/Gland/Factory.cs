@@ -4,11 +4,11 @@ using Assets.Library.StateMachines.Gland.States;
 
 namespace Assets.Library.StateMachines.Gland
 {
-    public class Factory : IFactory<StateCode, GlandInfo>
+    public class Factory : IFactory<StateCode, Info>
     {
-        public State<StateCode, GlandInfo> Get(StateCode code, Updater<StateCode, GlandInfo> updater, GlandInfo info)
+        public State<StateCode, Info> Get(StateCode code, Updater<StateCode, Info> updater, Info info)
         {
-            State<StateCode, GlandInfo> state = null;
+            State<StateCode, Info> state = null;
 
 
             switch (code)

@@ -3,6 +3,7 @@ using System;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityAssertionException = UnityEngine.Assertions.AssertionException;
 using Assets.Library;
 
 namespace Tests.Library
@@ -12,12 +13,11 @@ namespace Tests.Library
         [Test]
         public void Constructor_SetZero_ThrowsArgument()
         {
-            Assert.Throws<ArgumentException>
+            Assert.That
             (
-                () =>
-                {
-                    var number = new StrictlyPositiveFloat(0f);
-                }
+                () => { new StrictlyPositiveFloat(0f); },
+                Throws.InstanceOf<UnityAssertionException>()
+                        .With.Message.Contains("Value was False")
             );
         }
 
@@ -25,12 +25,11 @@ namespace Tests.Library
         [TestCase(-2)]
         public void Constructor_SetStrictlyNegativeValue_ThrowsArgument(float value)
         {
-            Assert.Throws<ArgumentException>
+            Assert.That
             (
-                () =>
-                {
-                    new StrictlyPositiveFloat(value);
-                }
+                () => { new StrictlyPositiveFloat(value); },
+                Throws.InstanceOf<UnityAssertionException>()
+                        .With.Message.Contains("Value was False")
             );
         }
 

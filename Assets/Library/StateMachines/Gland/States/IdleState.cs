@@ -2,9 +2,9 @@
 
 namespace Assets.Library.StateMachines.Gland.States
 {
-    public class IdleState : State<StateCode, GlandInfo>
+    public class IdleState : State<StateCode, Info>
     {
-        public IdleState(Updater<StateCode, GlandInfo> updater, GlandInfo info)
+        public IdleState(Updater<StateCode, Info> updater, Info info)
             : base(updater, info)
         { }
 

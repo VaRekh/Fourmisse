@@ -1,4 +1,4 @@
-﻿using System;
+﻿using UnityEngine.Assertions;
 
 namespace Assets.Library
 {
@@ -8,10 +8,7 @@ namespace Assets.Library
 
         public StrictlyPositiveFloat(float value)
         {
-            if (value <= 0f)
-            {
-                throw new ArgumentException();
-            }
+            Assert.IsTrue(value > 0f);
             Value = value;
         }
 

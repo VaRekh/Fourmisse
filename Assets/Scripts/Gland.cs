@@ -1,7 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
-
-using Assets.Library;
 using Assets.Library.StateMachines;
 using Assets.Library.StateMachines.Gland;
 using GlandStateCode = Assets.Library.StateMachines.Gland.StateCode;
@@ -14,25 +11,17 @@ namespace Assets.Scripts
     public class Gland : MonoBehaviour
     {
         [SerializeField]
-        private GlandInfo info;
+        private SerializedInfo info;
 
-        private Updater<GlandStateCode, GlandInfo> gland_updater;
+        private Updater<GlandStateCode, Info> gland_updater;
 
         private void Start()
         {
-            var seeker = GetComponent<Seeker>();
-            info.SeekerStateChanged = seeker.StateChanged;
-            GlandInfo TEMPINFO = new GlandInfo
-            (
-                new StrictlyPositiveFloat(1f / info.GenerationInterval),
-                transform,
-                info.Pheromone,
-                new UnityEvent<Collectable>(), // ATTENTION !
-                new UnityEvent<Storage>()
-            );
+            Info actual_info = info.Build();
+
             GlandFactory gland_factory = new GlandFactory();
 
-            gland_updater = new Updater<GlandStateCode, GlandInfo>(TEMPINFO, gland_factory);
+            gland_updater = new Updater<GlandStateCode, Info>(actual_info, gland_factory);
             gland_updater.Start();
         }
 

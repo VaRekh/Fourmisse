@@ -1,5 +1,7 @@
 #nullable enable
+using System;
 using NUnit.Framework;
+
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -28,7 +30,7 @@ namespace Tests.Library.Data
             return transform;
         }
 
-        private GlandInfoConstructorParameters MakeDefaultParameters()
+        private GlandInfoConstructorParameters MakeGlandInfoDefaultParameters()
         {
             return new GlandInfoConstructorParameters
             {
@@ -40,9 +42,9 @@ namespace Tests.Library.Data
             };
         }
 
-        private GlandInfo MakeGlandInfo(GlandInfoConstructorParameters constructor_parameters)
+        private Info MakeGlandInfo(GlandInfoConstructorParameters constructor_parameters)
         {
-            return new GlandInfo
+            return new Info
             (
                 constructor_parameters.GeneratedPheromonePerSecond,
                 constructor_parameters.GenerationTransform,
@@ -52,6 +54,20 @@ namespace Tests.Library.Data
             );
         }
 
+        private SerializedInfo MakeSerializedInfoDefaultValidParameters()
+        {
+            return new SerializedInfo
+            {
+                GeneratedPheromonePerSecond = 1f,
+                GenerationPosition = MakeDefaultTransform(),
+                PheromoneTemplate = new GameObject(),
+                ContactWithCollectableLost = new UnityEvent<Collectable>(),
+                ContactWithStorageHappened = new UnityEvent<Storage>()
+            };
+        }
+
+
+
         [TestCase(1f)]
         [TestCase(2f)]
         public void GetPheromoneProductionTimeInSecond_SetGeneratedPheromonePerSecond_ReturnsInverseValue
@@ -60,7 +76,7 @@ namespace Tests.Library.Data
         )
         {
             var generated_pheromone_per_second = new StrictlyPositiveFloat(value);
-            var parameters = MakeDefaultParameters();
+            var parameters = MakeGlandInfoDefaultParameters();
             parameters.GeneratedPheromonePerSecond = generated_pheromone_per_second;
             var expected = 1f / parameters.GeneratedPheromonePerSecond;
             var info = MakeGlandInfo(parameters);
@@ -72,7 +88,7 @@ namespace Tests.Library.Data
         [Test]
         public void WhenContactWithCollectableLost_ListenerShouldReactsWhenEventOccurs()
         {
-            var parameters = MakeDefaultParameters();
+            var parameters = MakeGlandInfoDefaultParameters();
             var info = MakeGlandInfo(parameters);
 
             info.ListenToLossOfContactWithCollectable(OnLossOfContact);
@@ -90,7 +106,7 @@ namespace Tests.Library.Data
         [Test]
         public void WhenContactWithCollectableLost_ListenerShouldNotReactsWhenUnsubscribed()
         {
-            var parameters = MakeDefaultParameters();
+            var parameters = MakeGlandInfoDefaultParameters();
             var info = MakeGlandInfo(parameters);
 
             parameters.ContactWithCollectableLost.AddListener(OnLossOfContact);
@@ -109,7 +125,7 @@ namespace Tests.Library.Data
         [Test]
         public void WhenContactWithStoragelHappened_ListenerShouldReactsWhenEventOccurs()
         {
-            var parameters = MakeDefaultParameters();
+            var parameters = MakeGlandInfoDefaultParameters();
             var info = MakeGlandInfo(parameters);
 
             info.ListenToContactWithStorage(OnContact);
@@ -127,7 +143,7 @@ namespace Tests.Library.Data
         [Test]
         public void WhenContactWithStoragelHappened_ListenerShouldNotReactsWhenUnsubscribed()
         {
-            var parameters = MakeDefaultParameters();
+            var parameters = MakeGlandInfoDefaultParameters();
             var info = MakeGlandInfo(parameters);
 
             parameters.ContactWithStorageHappened.AddListener(OnContact);
@@ -146,7 +162,7 @@ namespace Tests.Library.Data
         [Test]
         public void InstantiatePheromone_ReturnsPheromoneMatchingProvidedParameters()
         {
-            var parameters = MakeDefaultParameters();
+            var parameters = MakeGlandInfoDefaultParameters();
             var info = MakeGlandInfo(parameters);
 
             var pheromone = info.InstantiatePheromone();
@@ -171,7 +187,7 @@ namespace Tests.Library.Data
             [Values(-2f, 0f, 1f, 5f)] float position_y
         )
         {
-            var parameters = MakeDefaultParameters();
+            var parameters = MakeGlandInfoDefaultParameters();
             parameters.GenerationTransform.position = new Vector3(position_x, position_y);
             var info = MakeGlandInfo(parameters);
 
@@ -190,7 +206,7 @@ namespace Tests.Library.Data
             [Values(-25f, 0f, 90f, 180f)] float rotation_z
         )
         {
-            var parameters = MakeDefaultParameters();
+            var parameters = MakeGlandInfoDefaultParameters();
             parameters.PheromoneTemplate.transform.rotation = Quaternion.Euler(0f, 0f, rotation_z);
             var info = MakeGlandInfo(parameters);
 
@@ -204,78 +220,94 @@ namespace Tests.Library.Data
         }
 
         [Test]
-        public void WhenConstructorIsCalledWithNullTransform_ThrowsNullArgumentException()
+        public void WhenPheromoneTemplateIsInvalid_SerializedInfoShouldFailInBuildingInfo()
         {
-            var parameters = new GlandInfoConstructorParameters
-            {
-                GeneratedPheromonePerSecond = new StrictlyPositiveFloat(1f),
-                ContactWithCollectableLost = new UnityEvent<Collectable>(),
-                ContactWithStorageHappened = new UnityEvent<Storage>(),
-                PheromoneTemplate = new GameObject()
-            };
-
+            var serialized_info = MakeSerializedInfoDefaultValidParameters();
+            serialized_info.PheromoneTemplate = null;
             Assert.That
             (
-                () => { MakeGlandInfo(parameters); },
-                Throws  .InstanceOf<UnityAssertionException>()
-                        .With.Message.Contains("Value was Null")
-            );
-        }
-
-        [Test]
-        public void WhenConstructorIsCalledWithNullContactWithCollectableLost_ThrowsNullArgumentException()
-        {
-            var parameters = new GlandInfoConstructorParameters
-            {
-                GeneratedPheromonePerSecond = new StrictlyPositiveFloat(1f),
-                GenerationTransform = MakeDefaultTransform(),
-                ContactWithStorageHappened = new UnityEvent<Storage>(),
-                PheromoneTemplate = new GameObject()
-            };
-
-            Assert.That
-            (
-                () => { MakeGlandInfo(parameters); },
+                () => { serialized_info.Build(); },
                 Throws.InstanceOf<UnityAssertionException>()
                         .With.Message.Contains("Value was Null")
             );
         }
 
         [Test]
-        public void WhenConstructorIsCalledWithNullContactWithStorageHappened_ThrowsNullArgumentException()
+        public void WhenGeneratedPheromonePerSecondPheromonePerSecondIsInvalid_SerializedInfoShouldFailInBuildingInfo
+        (
+            [Values(-2f, -1f, 0f)] float generated_pheromone_per_second
+        )
         {
-            var parameters = new GlandInfoConstructorParameters
-            {
-                GeneratedPheromonePerSecond = new StrictlyPositiveFloat(1f),
-                GenerationTransform = MakeDefaultTransform(),
-                ContactWithCollectableLost = new UnityEvent<Collectable>(),
-                PheromoneTemplate = new GameObject()
-            };
+            var serialized_info = MakeSerializedInfoDefaultValidParameters();
+            serialized_info.GeneratedPheromonePerSecond = generated_pheromone_per_second;
 
             Assert.That
             (
-                () => { MakeGlandInfo(parameters); },
+                () => { serialized_info.Build(); },
+                Throws.InstanceOf<UnityAssertionException>()
+                        .With.Message.Contains("Value was False")
+            );
+        }
+
+        [Test]
+        public void WhenGenerationPositionIsInvalid_SerializedInfoShouldFailInBuildingInfo()
+        {
+            var serialized_info = MakeSerializedInfoDefaultValidParameters();
+
+            serialized_info.GenerationPosition = null;
+           
+            Assert.That
+            (
+                () => { serialized_info.Build(); },
                 Throws.InstanceOf<UnityAssertionException>()
                         .With.Message.Contains("Value was Null")
             );
         }
 
         [Test]
-        public void WhenConstructorIsCalledWithNullPheromoneTemplate_ThrowsNullArgumentException()
+        public void WhenContactWithCollectablLosteIsInvalid_SerializedInfoShouldFailInBuildingInfo()
         {
-            var parameters = new GlandInfoConstructorParameters
-            {
-                GeneratedPheromonePerSecond = new StrictlyPositiveFloat(1f),
-                GenerationTransform = MakeDefaultTransform(),
-                ContactWithCollectableLost = new UnityEvent<Collectable>(),
-                ContactWithStorageHappened = new UnityEvent<Storage>()
-            };
+            var serialized_info = MakeSerializedInfoDefaultValidParameters();
+
+            serialized_info.ContactWithCollectableLost = null;
+            Assert.That
+            (
+                () => { serialized_info.Build(); },
+                Throws.InstanceOf<UnityAssertionException>()
+                        .With.Message.Contains("Value was Null")
+            );
+        }
+
+        [Test]
+        public void WhenContactWithStorageHappenedIsInvalid_SerializedInfoShouldFailInBuildingInfo()
+        {
+            var serialized_info = MakeSerializedInfoDefaultValidParameters();
+            serialized_info.ContactWithStorageHappened = null;
+            
+            Assert.That
+            (
+                () => { serialized_info.Build(); },
+                Throws.InstanceOf<UnityAssertionException>()
+                        .With.Message.Contains("Value was Null")
+            );
+        }
+
+        [Test]
+        public void WhenDataIsValid_SerializedInfoShouldSucceedInBuildingInfo()
+        {
+            var serialized_info = MakeSerializedInfoDefaultValidParameters();
+            Info? info = null;
 
             Assert.That
             (
-                () => { MakeGlandInfo(parameters); },
-                Throws.InstanceOf<UnityAssertionException>()
-                        .With.Message.Contains("Value was Null")
+                () => { info = serialized_info.Build(); },
+                Throws.Nothing
+            );
+
+            Assert.That
+            (
+                info,
+                Is.Not.Null
             );
         }
     }

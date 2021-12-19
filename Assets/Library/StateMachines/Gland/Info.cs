@@ -9,9 +9,9 @@ using SeekerStateCode = Assets.Library.StateMachines.Seeker.StateCode;
 namespace Assets.Library.StateMachines.Gland
 {
     [Serializable]
-    public class GlandInfo
+    public class Info
     {
-        public GlandInfo
+        public Info
         (
             StrictlyPositiveFloat generated_pheromone_per_second,
             Transform generation_position,
@@ -79,31 +79,6 @@ namespace Assets.Library.StateMachines.Gland
                 GenerationPosition,
                 PheromoneTemplate.transform.rotation
             );
-        }
-
-
-
-
-
-        [SerializeField]
-        private GameObject? pheromone;
-        [SerializeField]
-        private float pheromone_per_second;
-
-        private UnityEvent<SeekerStateCode>? seeker_state_changed;
-        private Transform? generation_transform;
-
-
-        public GameObject? Pheromone
-            => pheromone;
-
-        public float GenerationInterval
-            => 1f / pheromone_per_second;
-
-        public UnityEvent<SeekerStateCode>? SeekerStateChanged
-        {
-            get => seeker_state_changed;
-            set => seeker_state_changed = value ?? throw new ArgumentNullException();
         }
     }
 }
