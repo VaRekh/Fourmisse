@@ -9,7 +9,6 @@ using ControllerFactory = Assets.Library.StateMachines.Controller.Factory;
 namespace Assets.Scripts
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(Seeker))]
     public class Controller : MonoBehaviour
     {
         [SerializeField]
@@ -27,9 +26,8 @@ namespace Assets.Scripts
             var parent_transform = transform.parent;
             Assert.IsNotNull(parent_transform);
 
-            var pheromone_detectors = parent_transform.GetComponentsInChildren<PheromoneDetector>();
-            Assert.IsTrue(pheromone_detectors.Length == 1);
-            var detector = pheromone_detectors[0].Detector;
+            var pheromone_detector = GetComponentsInChildren<PheromoneDetector>(parent_transform);
+            var detector = pheromone_detector.Detector;
             Assert.IsNotNull(detector);
 
             var rb = GetComponentInParent<Rigidbody2D>();
@@ -49,24 +47,52 @@ namespace Assets.Scripts
             }
             Assert.IsNotNull(pheromone_detection_area);
 
-            var seeker = GetComponent<Seeker>();
-            Assert.IsNotNull(seeker);
-            var seeker_updater = seeker.SeekerUpdater;
-            Assert.IsNotNull(seeker_updater);
+
+            var collectable_detector = GetComponentsInChildren<CollectableDetector>(parent_transform);
+
+            var collector = GetComponentsInChildren<Collector>(parent_transform);
+
+            var collector_completely_emptied_event = new UnityEventSubscription
+            {
+                ListenToUnityEvent = collector.ListenToCollectorCompletelyEmptied,
+                StopListeningToUnityEvent = collector.StopListeningToCollectorCompletelyEmptied
+            };
+
+            var collector_completely_loaded_event = new UnityEventSubscription
+            {
+                ListenToUnityEvent = collector.ListenToCollectorCompletelyLoaded,
+                StopListeningToUnityEvent = collector.StopListeningToCollectorCompletelyLoaded
+            };
+
+            var storage_detector = GetComponentsInChildren<StorageDetector>(parent_transform);
 
             info.Init
             (
-            pheromone_detection_area,
-            rb,
-            parent_transform,
-            seeker_updater,
-            detector
+                pheromone_detection_area,
+                rb,
+                parent_transform,
+                detector,
+                collectable_detector.ContactWithNonEmptyCollectableHappened,
+                collector_completely_emptied_event,
+                collector_completely_loaded_event,
+                storage_detector.ContactWithStorageHappened
             );
-
+            
 
             ControllerFactory controller_factory = new ControllerFactory();
-            controller_updater = new Updater<ControllerStateCode, ControllerInfo>(info, controller_factory);
+            controller_updater = new Updater<ControllerStateCode, ControllerInfo>(info, controller_factory, ControllerStateCode.Seek);
+            controller_updater.StateChanged.AddListener(OnStateChanged);
             controller_updater.Start();
+
+            static T GetComponentsInChildren<T>(Transform parent_transform)
+                where T : MonoBehaviour
+            {
+                var components = parent_transform.GetComponentsInChildren<T>();
+                Assert.IsTrue(components.Length == 1);
+                var component = components[0];
+
+                return component;
+            }
         }
 
         // Update is called once per frame
@@ -78,6 +104,11 @@ namespace Assets.Scripts
         private void FixedUpdate()
         {
             controller_updater.FixedUpdate(Time.fixedDeltaTime);
+        }
+
+        private void OnStateChanged(ControllerStateCode new_state)
+        {
+            print(System.Enum.GetName(typeof(ControllerStateCode), new_state));
         }
     }
 }

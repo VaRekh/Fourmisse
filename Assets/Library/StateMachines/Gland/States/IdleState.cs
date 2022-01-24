@@ -1,6 +1,4 @@
-﻿using Assets.Library.Data;
-
-namespace Assets.Library.StateMachines.Gland.States
+﻿namespace Assets.Library.StateMachines.Gland.States
 {
     public class IdleState : State<StateCode, Info>
     {

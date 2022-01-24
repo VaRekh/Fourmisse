@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Assertions;
 
-using SeekerStateCode = Assets.Library.StateMachines.Seeker.StateCode;
-
 namespace Assets.Library.StateMachines.Gland
 {
     [Serializable]
@@ -13,41 +11,62 @@ namespace Assets.Library.StateMachines.Gland
     {
         public Info
         (
-            StrictlyPositiveFloat generated_pheromone_per_second,
-            Transform generation_position,
-            GameObject pheromone_template,
+            SerializedInfo serialized_info,
             UnityEvent<Collectable> contact_with_collectable_lost,
             UnityEvent<Storage> contact_with_storage_happened
         )
         {
-            Assert.IsNotNull(generation_position);
-            Assert.IsNotNull(pheromone_template);
+            Assert.IsNotNull(serialized_info);
+            _ = new StrictlyPositiveFloat(serialized_info.GeneratedPheromonePerSecond);
+            Assert.IsNotNull(serialized_info.GenerationPosition);
+            Assert.IsNotNull(serialized_info.PheromoneTemplate);
             Assert.IsNotNull(contact_with_collectable_lost);
             Assert.IsNotNull(contact_with_storage_happened);
 
-            GeneratedPheromonePerSecond = generated_pheromone_per_second;
-            GenerationTransform = generation_position;
-            PheromoneTemplate = pheromone_template;
+            SerializedInfo = serialized_info;
             ContactWithCollectableLost = contact_with_collectable_lost;
             ContactWithStorageHappened = contact_with_storage_happened;
 
-            Assert.IsNotNull(GenerationTransform);
-            Assert.IsNotNull(PheromoneTemplate);
+            Assert.IsNotNull(SerializedInfo);
             Assert.IsNotNull(ContactWithCollectableLost);
             Assert.IsNotNull(ContactWithStorageHappened);
         }
-
-        private Transform GenerationTransform { get; set; }
+        
+        private SerializedInfo SerializedInfo { get; set; }
         private UnityEvent<Collectable> ContactWithCollectableLost { get; set; }
         private UnityEvent<Storage> ContactWithStorageHappened { get; set; }
-
-        private StrictlyPositiveFloat GeneratedPheromonePerSecond { get; set; }
-        
-        private Vector2 GenerationPosition
-            => GenerationTransform.position;
+        private GameObject PheromoneTemplate
+        {
+            get
+            {
+                Assert.IsNotNull(SerializedInfo.PheromoneTemplate);
+                return SerializedInfo.PheromoneTemplate;
+            }
+        }
+        private Transform GenerationTransform
+        {
+            get
+            {
+                Assert.IsNotNull(SerializedInfo.GenerationPosition);
+                return SerializedInfo.GenerationPosition;
+            }
+        }
+        private float GeneratedPheromonePerSecond
+        {
+            get
+            {
+                var generated_pheromone_per_second = new StrictlyPositiveFloat(SerializedInfo.GeneratedPheromonePerSecond);
+                return generated_pheromone_per_second;
+            }
+        }
 
         public float PheromoneProductionTimeInSecond
             => 1f / GeneratedPheromonePerSecond;
+
+
+        private Vector2 GenerationPosition
+            => GenerationTransform.position;
+
 
         public void ListenToLossOfContactWithCollectable(UnityAction<Collectable> listener)
         {
@@ -68,8 +87,6 @@ namespace Assets.Library.StateMachines.Gland
         {
             ContactWithStorageHappened.RemoveListener(listener);
         }
-
-        private GameObject PheromoneTemplate { get; set; }
 
         public GameObject InstantiatePheromone()
         {

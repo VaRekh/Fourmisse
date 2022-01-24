@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
-using Assets.Library.Data;
 
 namespace Assets.Library.StateMachines.Collector.States
 {
@@ -13,23 +12,24 @@ namespace Assets.Library.StateMachines.Collector.States
         public override void Enter(params object[] data)
         {
             Updater.StateChanged.Invoke(StateCode.Idle);
+            Info.ListenToContactWithNonEmptyCollectableHappenned(OnContactWithNonEmptyCollectableHappenned);
+            Info.ListenToContactWithStorageHappened(OnContactWithStorageHappened);
         }
 
-        public override void OnTriggerEnter2D(Collider2D collision, params object[] data)
+        public override void Exit()
         {
-            Assert.IsTrue(data.Length == 1);
+            Info.StopListeningToContactWithNonEmptyCollectableHappenned(OnContactWithNonEmptyCollectableHappenned);
+            Info.StopListeningToContactWithStorageHappened(OnContactWithStorageHappened);
+        }
 
-            switch(data[0])
-            {
-                case Collectable collectable:
-                    Updater.Change(StateCode.Collect, collectable);
-                    break;
-                case Storage storage:
-                    Updater.Change(StateCode.Dump, storage);
-                    break;
-                default:
-                    break;
-            }
+        public void OnContactWithNonEmptyCollectableHappenned(Collectable collectable)
+        {
+            Updater.Change(StateCode.Collect, collectable);
+        }
+
+        public void OnContactWithStorageHappened(Storage storage)
+        {
+            Updater.Change(StateCode.Dump, storage);
         }
     }
 }

@@ -18,7 +18,8 @@ namespace Assets.Library.StateMachines
         public Updater
         (
             TInfo info,
-            IFactory<TStateCode, TInfo> factory
+            IFactory<TStateCode, TInfo> factory,
+            TStateCode initial_state = default
         )
         {
             var state_codes = Enum<TStateCode>.Values;
@@ -33,7 +34,7 @@ namespace Assets.Library.StateMachines
                 states[state_index] = state;
             }
 
-            CurrentStateCode = default;
+            CurrentStateCode = initial_state;
             int current_state_index = Enum<TStateCode>.Convert(CurrentStateCode);
             current_state = states[current_state_index];
 

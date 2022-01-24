@@ -1,5 +1,4 @@
 #nullable enable
-using System;
 using NUnit.Framework;
 
 using UnityEngine;
@@ -16,9 +15,15 @@ namespace Tests.Library.Data
     {
         private struct GlandInfoConstructorParameters
         {
-            public StrictlyPositiveFloat GeneratedPheromonePerSecond { get; set; }
-            public Transform GenerationTransform { get; set; }
+            public float GeneratedPheromonePerSecond { get; set; }
+            public Transform GenerationPosition { get; set; }
             public GameObject PheromoneTemplate { get; set; }
+            public UnityEvent<Collectable> ContactWithCollectableLost { get; set; }
+            public UnityEvent<Storage> ContactWithStorageHappened { get; set; }
+        }
+
+        private struct SerializedInfoBuildParameters
+        {
             public UnityEvent<Collectable> ContactWithCollectableLost { get; set; }
             public UnityEvent<Storage> ContactWithStorageHappened { get; set; }
         }
@@ -32,25 +37,30 @@ namespace Tests.Library.Data
 
         private GlandInfoConstructorParameters MakeGlandInfoDefaultParameters()
         {
+            var serialized_info = MakeSerializedInfoDefaultValidParameters();
             return new GlandInfoConstructorParameters
             {
-                GeneratedPheromonePerSecond = new StrictlyPositiveFloat(1f),
-                GenerationTransform = MakeDefaultTransform(),
-                PheromoneTemplate = new GameObject(),
+                GeneratedPheromonePerSecond = serialized_info.GeneratedPheromonePerSecond,
+                GenerationPosition = serialized_info.GenerationPosition,
+                PheromoneTemplate = serialized_info.PheromoneTemplate,
                 ContactWithCollectableLost = new UnityEvent<Collectable>(),
                 ContactWithStorageHappened = new UnityEvent<Storage>()
             };
         }
 
-        private Info MakeGlandInfo(GlandInfoConstructorParameters constructor_parameters)
+        private Info MakeGlandInfo(GlandInfoConstructorParameters parameters)
         {
+            var serialized_info = new SerializedInfo
+            {
+                GeneratedPheromonePerSecond = parameters.GeneratedPheromonePerSecond,
+                GenerationPosition = parameters.GenerationPosition,
+                PheromoneTemplate = parameters.PheromoneTemplate
+            };
             return new Info
             (
-                constructor_parameters.GeneratedPheromonePerSecond,
-                constructor_parameters.GenerationTransform,
-                constructor_parameters.PheromoneTemplate,
-                constructor_parameters.ContactWithCollectableLost,
-                constructor_parameters.ContactWithStorageHappened
+                serialized_info,
+                parameters.ContactWithCollectableLost,
+                parameters.ContactWithStorageHappened
             );
         }
 
@@ -60,13 +70,18 @@ namespace Tests.Library.Data
             {
                 GeneratedPheromonePerSecond = 1f,
                 GenerationPosition = MakeDefaultTransform(),
-                PheromoneTemplate = new GameObject(),
+                PheromoneTemplate = new GameObject()
+            };
+        }
+
+        private SerializedInfoBuildParameters MakeSerializedInfoBuildDefaultValueParameters()
+        {
+            return new SerializedInfoBuildParameters
+            {
                 ContactWithCollectableLost = new UnityEvent<Collectable>(),
                 ContactWithStorageHappened = new UnityEvent<Storage>()
             };
         }
-
-
 
         [TestCase(1f)]
         [TestCase(2f)]
@@ -94,7 +109,7 @@ namespace Tests.Library.Data
             info.ListenToLossOfContactWithCollectable(OnLossOfContact);
             bool reacted_to_event = false;
 
-            parameters.ContactWithCollectableLost.Invoke(new Collectable(0));
+            parameters.ContactWithCollectableLost.Invoke(new Collectable(new UintReference(0)));
             Assert.That(reacted_to_event, Is.True);
 
             void OnLossOfContact(Collectable collectable)
@@ -113,7 +128,7 @@ namespace Tests.Library.Data
             info.StopListeningToLossOfContactWithCollectable(OnLossOfContact);
             bool reacted_to_event = false;
 
-            parameters.ContactWithCollectableLost.Invoke(new Collectable(0));
+            parameters.ContactWithCollectableLost.Invoke(new Collectable(new UintReference(0)));
             Assert.That(reacted_to_event, Is.False);
 
             void OnLossOfContact(Collectable collectable)
@@ -170,13 +185,13 @@ namespace Tests.Library.Data
             Assert.That
             (
                 pheromone.transform.position,
-                Is.EqualTo(parameters.GenerationTransform.position)
+                Is.EqualTo(parameters.GenerationPosition.position)
             );
 
             Assert.That
             (
                 pheromone.transform.rotation,
-                Is.EqualTo(parameters.GenerationTransform.rotation)
+                Is.EqualTo(parameters.GenerationPosition.rotation)
             );
         }
 
@@ -188,7 +203,7 @@ namespace Tests.Library.Data
         )
         {
             var parameters = MakeGlandInfoDefaultParameters();
-            parameters.GenerationTransform.position = new Vector3(position_x, position_y);
+            parameters.GenerationPosition.position = new Vector3(position_x, position_y);
             var info = MakeGlandInfo(parameters);
 
             var pheromone = info.InstantiatePheromone();
@@ -196,7 +211,7 @@ namespace Tests.Library.Data
             Assert.That
             (
                 pheromone.transform.position,
-                Is.EqualTo(parameters.GenerationTransform.position)
+                Is.EqualTo(parameters.GenerationPosition.position)
             );
         }
 
@@ -222,11 +237,19 @@ namespace Tests.Library.Data
         [Test]
         public void WhenPheromoneTemplateIsInvalid_SerializedInfoShouldFailInBuildingInfo()
         {
+            var build_parameters = MakeSerializedInfoBuildDefaultValueParameters();
             var serialized_info = MakeSerializedInfoDefaultValidParameters();
             serialized_info.PheromoneTemplate = null;
             Assert.That
             (
-                () => { serialized_info.Build(); },
+                () =>
+                {
+                    serialized_info.Build
+                    (
+                        build_parameters.ContactWithCollectableLost,
+                        build_parameters.ContactWithStorageHappened
+                    );
+                },
                 Throws.InstanceOf<UnityAssertionException>()
                         .With.Message.Contains("Value was Null")
             );
@@ -238,12 +261,20 @@ namespace Tests.Library.Data
             [Values(-2f, -1f, 0f)] float generated_pheromone_per_second
         )
         {
+            var build_parameters = MakeSerializedInfoBuildDefaultValueParameters();
             var serialized_info = MakeSerializedInfoDefaultValidParameters();
             serialized_info.GeneratedPheromonePerSecond = generated_pheromone_per_second;
 
             Assert.That
             (
-                () => { serialized_info.Build(); },
+                () =>
+                {
+                    serialized_info.Build
+                    (
+                        build_parameters.ContactWithCollectableLost,
+                        build_parameters.ContactWithStorageHappened
+                    );
+                },
                 Throws.InstanceOf<UnityAssertionException>()
                         .With.Message.Contains("Value was False")
             );
@@ -252,41 +283,21 @@ namespace Tests.Library.Data
         [Test]
         public void WhenGenerationPositionIsInvalid_SerializedInfoShouldFailInBuildingInfo()
         {
+            var build_parameters = MakeSerializedInfoBuildDefaultValueParameters();
             var serialized_info = MakeSerializedInfoDefaultValidParameters();
 
             serialized_info.GenerationPosition = null;
            
             Assert.That
             (
-                () => { serialized_info.Build(); },
-                Throws.InstanceOf<UnityAssertionException>()
-                        .With.Message.Contains("Value was Null")
-            );
-        }
-
-        [Test]
-        public void WhenContactWithCollectablLosteIsInvalid_SerializedInfoShouldFailInBuildingInfo()
-        {
-            var serialized_info = MakeSerializedInfoDefaultValidParameters();
-
-            serialized_info.ContactWithCollectableLost = null;
-            Assert.That
-            (
-                () => { serialized_info.Build(); },
-                Throws.InstanceOf<UnityAssertionException>()
-                        .With.Message.Contains("Value was Null")
-            );
-        }
-
-        [Test]
-        public void WhenContactWithStorageHappenedIsInvalid_SerializedInfoShouldFailInBuildingInfo()
-        {
-            var serialized_info = MakeSerializedInfoDefaultValidParameters();
-            serialized_info.ContactWithStorageHappened = null;
-            
-            Assert.That
-            (
-                () => { serialized_info.Build(); },
+                () =>
+                {
+                    serialized_info.Build
+                    (
+                        build_parameters.ContactWithCollectableLost,
+                        build_parameters.ContactWithStorageHappened
+                    );
+                },
                 Throws.InstanceOf<UnityAssertionException>()
                         .With.Message.Contains("Value was Null")
             );
@@ -295,12 +306,20 @@ namespace Tests.Library.Data
         [Test]
         public void WhenDataIsValid_SerializedInfoShouldSucceedInBuildingInfo()
         {
+            var build_parameters = MakeSerializedInfoBuildDefaultValueParameters();
             var serialized_info = MakeSerializedInfoDefaultValidParameters();
             Info? info = null;
 
             Assert.That
             (
-                () => { info = serialized_info.Build(); },
+                () =>
+                {
+                    info = serialized_info.Build
+                    (
+                        build_parameters.ContactWithCollectableLost,
+                        build_parameters.ContactWithStorageHappened
+                    );
+                },
                 Throws.Nothing
             );
 

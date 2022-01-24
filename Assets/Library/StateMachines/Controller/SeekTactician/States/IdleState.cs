@@ -1,6 +1,4 @@
-﻿using Assets.Library.Data;
-
-namespace Assets.Library.StateMachines.Controller.SeekTactician.States
+﻿namespace Assets.Library.StateMachines.Controller.SeekTactician.States
 {
     public class IdleState : State<StateCode, SeekTacticianInfo>
     {

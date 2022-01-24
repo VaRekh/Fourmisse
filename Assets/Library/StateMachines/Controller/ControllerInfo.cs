@@ -2,9 +2,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Assertions;
-using Assets.Library.Data;
 using Assets.Library.StateMachines.Controller.SeekTactician;
-using SeekerStateCode = Assets.Library.StateMachines.Seeker.StateCode;
 
 namespace Assets.Library.StateMachines.Controller
 {
@@ -69,8 +67,6 @@ namespace Assets.Library.StateMachines.Controller
         [SerializeField][HideInInspector]
         private Detector pheromone_detector;
 
-        private Updater<SeekerStateCode, SeekerInfo> seeker;
-
         public float Movespeed
             => shared_info.Movespeed;
 
@@ -92,33 +88,78 @@ namespace Assets.Library.StateMachines.Controller
         public Rigidbody2D Rigidbody
             => shared_info.Rigidbody;
 
-        private Updater<SeekerStateCode, SeekerInfo> Seeker
+        #region Subscribe/Unsubscribed
+        private UnityEvent<Collectable> ContactWithNonEmptyCollectableHappened { get; set; }
+
+        public void ListenToContactWithNonEmptyCollectableHappened(UnityAction<Collectable> listener)
         {
-            set
-            {
-                Assert.IsNotNull(value);
-                seeker = value;
-            }
+            ContactWithNonEmptyCollectableHappened.AddListener(listener);
         }
 
-        public SeekerStateCode SeekerCurrentState
-            => seeker.CurrentStateCode;
+        public void StopListeningToContactWithNonEmptyCollectableHappened(UnityAction<Collectable> listener)
+        {
+            ContactWithNonEmptyCollectableHappened.RemoveListener(listener);
+        }
 
-        public UnityEvent<SeekerStateCode> SeekerStateChanged
-            => seeker.StateChanged;
+
+        private UnityEventSubscription CollectorCompletelyEmptied { get; set; }
+
+        public void ListenToCollectorCompletelyEmptied(UnityAction listener)
+        {
+            CollectorCompletelyEmptied.ListenToUnityEvent(listener);
+        }
+
+        public void StopListeningToCollectorCompletelyEmptied(UnityAction listener)
+        {
+            CollectorCompletelyEmptied.StopListeningToUnityEvent(listener);
+        }
+
+
+        private UnityEventSubscription CollectorCompletelyLoaded { get; set; }
+
+        public void ListenToCollectorCompletelyLoaded(UnityAction listener)
+        {
+            CollectorCompletelyLoaded.ListenToUnityEvent(listener);
+        }
+
+        public void StopListeningToCollectorCompletelyLoaded(UnityAction listener)
+        {
+            CollectorCompletelyLoaded.StopListeningToUnityEvent(listener);
+        }
+
+
+        private UnityEvent<Storage> ContactWithStorageHappened { get; set; }
+
+        public void ListenToContactWithStorageHappened(UnityAction<Storage> listener)
+        {
+            ContactWithStorageHappened.AddListener(listener);
+        }
+
+        public void StopListeningToContactWithStorageHappened(UnityAction<Storage> listener)
+        {
+            ContactWithStorageHappened.RemoveListener(listener);
+        }
+
+        #endregion
 
         public void Init
         (
             Collider2D pheromone_detection_area,
             Rigidbody2D rigidbody,
             Transform ant,
-            Updater<SeekerStateCode, SeekerInfo> seeker,
-            Detector pheromone_detector
+            Detector pheromone_detector,
+            UnityEvent<Collectable>? contact_with_non_empty_collectable_happened,
+            UnityEventSubscription collector_completely_emptied,
+            UnityEventSubscription collector_completely_loaded,
+            UnityEvent<Storage> contact_with_storage_happened
         )
         {
-            Seeker = seeker;
             shared_info.Init(rigidbody, ant);
+            ContactWithNonEmptyCollectableHappened = contact_with_non_empty_collectable_happened;
             SeekTacticianInfo.Init(shared_info, pheromone_detection_area, pheromone_detector);
+            CollectorCompletelyEmptied = collector_completely_emptied;
+            CollectorCompletelyLoaded = collector_completely_loaded;
+            ContactWithStorageHappened = contact_with_storage_happened;
         }
     }
 }

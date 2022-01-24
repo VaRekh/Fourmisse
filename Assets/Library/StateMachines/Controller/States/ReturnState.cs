@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using SeekerStateCode = Assets.Library.StateMachines.Seeker.StateCode;
-using Assets.Library.Data;
 
 namespace Assets.Library.StateMachines.Controller.States
 {
@@ -13,7 +11,7 @@ namespace Assets.Library.StateMachines.Controller.States
         public override void Enter(params object[] data)
         {
             Updater.StateChanged.Invoke(StateCode.Return);
-            Info.SeekerStateChanged.AddListener(ReactToSeekerStateChanged);
+            Info.ListenToContactWithStorageHappened(OnContactWithStorageHappened);
 
             Vector2 normalized_direction = ComputeNormalizedDirection(Info.AntPosition, Info.AnthillPosition);
             Info.Rigidbody.ChangeDirection(Info.Movespeed, normalized_direction);
@@ -29,19 +27,12 @@ namespace Assets.Library.StateMachines.Controller.States
 
         public override void Exit()
         {
-            Info.SeekerStateChanged.RemoveListener(ReactToSeekerStateChanged);
+            Info.StopListeningToContactWithStorageHappened(OnContactWithStorageHappened);
         }
 
-        public void ReactToSeekerStateChanged(SeekerStateCode new_state)
+        public void OnContactWithStorageHappened(Storage storage)
         {
-            switch (new_state)
-            {
-                case SeekerStateCode.Dump:
-                    Updater.Change(StateCode.Idle);
-                    break;
-                default:
-                    break;
-            }
+            Updater.Change(StateCode.Idle);
         }
     }
 }

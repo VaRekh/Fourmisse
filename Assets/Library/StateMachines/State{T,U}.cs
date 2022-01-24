@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using Assets.Library.Data;
 
 namespace Assets.Library.StateMachines
 {

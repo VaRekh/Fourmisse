@@ -1,5 +1,4 @@
 ﻿using UnityEngine.Assertions;
-using Assets.Library.Data;
 
 namespace Assets.Library.StateMachines.Collector.States
 {

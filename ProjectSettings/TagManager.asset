@@ -11,13 +11,13 @@ TagManager:
   - 
   - Water
   - UI
-  - AntDetectionResources
+  - AntDetectionCollectable
   - Resources
   - Anthill
   - Pheromones
   - AntDetectionPheromones
   - Ant
-  - 
+  - AntDetectionStorage
   - 
   - 
   - 

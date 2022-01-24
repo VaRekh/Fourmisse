@@ -1,5 +1,4 @@
-﻿using SeekerStateCode = Assets.Library.StateMachines.Seeker.StateCode;
-using TacticianStateCode = Assets.Library.StateMachines.Controller.SeekTactician.StateCode;
+﻿using TacticianStateCode = Assets.Library.StateMachines.Controller.SeekTactician.StateCode;
 using TacticianFactory = Assets.Library.StateMachines.Controller.SeekTactician.Factory;
 using Assets.Library.StateMachines.Controller.SeekTactician;
 
@@ -19,7 +18,7 @@ namespace Assets.Library.StateMachines.Controller.States
         public override void Enter(params object[] data)
         {
             Updater.StateChanged.Invoke(StateCode.Seek);
-            Info.SeekerStateChanged.AddListener(ReactToSeekerStateChanged);
+            Info.ListenToContactWithNonEmptyCollectableHappened(OnContactWithNonEmptyCollectableHappened);
         }
 
         public override void Update(float delta_time)
@@ -35,19 +34,12 @@ namespace Assets.Library.StateMachines.Controller.States
         public override void Exit()
         {
             seek_tactician_updater.Change(TacticianStateCode.Idle);
-            Info.SeekerStateChanged.RemoveListener(ReactToSeekerStateChanged);
+            Info.StopListeningToContactWithNonEmptyCollectableHappened(OnContactWithNonEmptyCollectableHappened);
         }
 
-        private void ReactToSeekerStateChanged(SeekerStateCode new_state)
+        private void OnContactWithNonEmptyCollectableHappened(Collectable collectable)
         {
-            switch (new_state)
-            {
-                case SeekerStateCode.Collect:
-                    Updater.Change(StateCode.Idle);
-                    break;
-                default:
-                    break;
-            }
+            Updater.Change(StateCode.Idle, collectable);
         }
     }
 }

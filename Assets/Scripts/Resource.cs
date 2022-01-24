@@ -9,7 +9,7 @@ namespace Assets.Scripts
     public class Resource : MonoBehaviour
     {
         [SerializeField]
-        private uint load;
+        private UintReference load;
 
         public Collectable Collectable { get; private set; }
 

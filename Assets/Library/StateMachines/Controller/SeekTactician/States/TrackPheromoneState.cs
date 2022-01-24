@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
 using System.Collections.Generic;
-using Assets.Library.Data;
 
 namespace Assets.Library.StateMachines.Controller.SeekTactician.States
 {

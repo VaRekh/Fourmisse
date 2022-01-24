@@ -1,11 +1,13 @@
-﻿using UnityEngine;
-using SeekerStateCode = Assets.Library.StateMachines.Seeker.StateCode;
-using Assets.Library.Data;
+﻿#nullable enable
+using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Assets.Library.StateMachines.Controller.States
 {
     public class IdleState : State<StateCode, ControllerInfo>
     {
+        private Collectable? CurrentlyCollectedCollectable { get; set; }
+
         public IdleState(Updater<StateCode, ControllerInfo> updater, ControllerInfo info)
             : base(updater, info)
         { }
@@ -13,30 +15,45 @@ namespace Assets.Library.StateMachines.Controller.States
         public override void Enter(params object[] data)
         {
             Updater.StateChanged.Invoke(StateCode.Idle);
-            Info.SeekerStateChanged.AddListener(ReactToSeekerStateChanged);
+            Info.ListenToCollectorCompletelyEmptied(OnCollectorCompletelyEmptied);
+            Info.ListenToCollectorCompletelyLoaded(OnCollectorCompletelyLoaded);
+
+            Assert.IsTrue(data.Length == 0 || data.Length == 1);
+
+            if (data.Length == 1)
+            {
+                var collectable = data[0] as Collectable;
+                Assert.IsNotNull(collectable);
+                CurrentlyCollectedCollectable = collectable;
+            }
+            
+            CurrentlyCollectedCollectable?.ListenToCollectableCompletelyEmptied(OnCollectableCompletelyEmptied);
 
             Info.Rigidbody.ChangeDirection(0f, Vector2.zero);
-            ReactToSeekerStateChanged(Info.SeekerCurrentState);
         }
 
         public override void Exit()
         {
-            Info.SeekerStateChanged.RemoveListener(ReactToSeekerStateChanged);
+            Info.StopListeningToCollectorCompletelyEmptied(OnCollectorCompletelyEmptied);
+            Info.StopListeningToCollectorCompletelyLoaded(OnCollectorCompletelyLoaded);
+
+            CurrentlyCollectedCollectable?.StopListeningToCollectableCompletelyEmptied(OnCollectableCompletelyEmptied);
+            CurrentlyCollectedCollectable = null;
         }
 
-        public void ReactToSeekerStateChanged(SeekerStateCode new_state)
+        public void OnCollectorCompletelyEmptied()
         {
-            switch (new_state)
-            {
-                case SeekerStateCode.Seek:
-                    Updater.Change(StateCode.Seek);
-                    break;
-                case SeekerStateCode.Return:
-                    Updater.Change(StateCode.Return);
-                    break;
-                default:
-                    break;
-            }
+            Updater.Change(StateCode.Seek);
+        }
+
+        public void OnCollectorCompletelyLoaded()
+        {
+            Updater.Change(StateCode.Return);
+        }
+
+        public void OnCollectableCompletelyEmptied()
+        {
+            Updater.Change(StateCode.Return);
         }
     }
 }

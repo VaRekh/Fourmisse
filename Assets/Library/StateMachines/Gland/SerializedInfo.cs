@@ -6,7 +6,7 @@ using UnityEngine.Events;
 namespace Assets.Library.StateMachines.Gland
 {
     [Serializable]
-    public struct SerializedInfo
+    public class SerializedInfo
     {
         [SerializeField]
         public GameObject? PheromoneTemplate;
@@ -18,22 +18,17 @@ namespace Assets.Library.StateMachines.Gland
         [SerializeField]
         public Transform? GenerationPosition;
 
-        [SerializeField]
-        public UnityEvent<Collectable>? ContactWithCollectableLost;
-
-        [SerializeField]
-        public UnityEvent<Storage>? ContactWithStorageHappened;
-
-        public Info Build()
+        public Info Build
+        (
+            UnityEvent<Collectable> contact_with_collectable_lost,
+            UnityEvent<Storage> contact_with_storage_happened
+        )
         {
-            var generated_pheromone_per_second = new StrictlyPositiveFloat(GeneratedPheromonePerSecond);
             var info = new Info
             (
-                generated_pheromone_per_second,
-                GenerationPosition,
-                PheromoneTemplate,
-                ContactWithCollectableLost,
-                ContactWithStorageHappened
+                this,
+                contact_with_collectable_lost,
+                contact_with_storage_happened
             );
 
             return info;
