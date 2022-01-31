@@ -2,16 +2,16 @@
 {
     public class Storage
     {
-        private uint Load { get; set; }
+        private UintReference Load { get; set; }
 
-        public Storage(uint load)
+        public Storage(UintReference load)
         {
             Load = load;
         }
         
         public void Store(uint load_given)
         {
-            Load += load_given;
+            Load.Value += load_given;
         }
     }
 }

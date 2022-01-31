@@ -13,7 +13,7 @@ namespace Assets.Scripts
         public Detector Detector
             => detector;
 
-        private void Start()
+        private void Awake()
         {
             detector = new Detector();
         }

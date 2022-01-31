@@ -146,7 +146,7 @@ namespace Tests.Library.Data
             info.ListenToContactWithStorage(OnContact);
             bool reacted_to_event = false;
 
-            parameters.ContactWithStorageHappened.Invoke(new Storage(0));
+            parameters.ContactWithStorageHappened.Invoke(new Storage(new UintReference(0)));
             Assert.That(reacted_to_event, Is.True);
 
             void OnContact(Storage storage)
@@ -165,7 +165,7 @@ namespace Tests.Library.Data
             info.StopListeningToContactWithStorage(OnContact);
             bool reacted_to_event = false;
 
-            parameters.ContactWithStorageHappened.Invoke(new Storage(0));
+            parameters.ContactWithStorageHappened.Invoke(new Storage(new UintReference(0)));
             Assert.That(reacted_to_event, Is.False);
 
             void OnContact(Storage storage)

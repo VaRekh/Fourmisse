@@ -8,7 +8,6 @@ using CollectorFactory = Assets.Library.StateMachines.Collector.Factory;
 namespace Assets.Scripts
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(CircleCollider2D))]
     public class Collector : MonoBehaviour
     {
         [SerializeField]

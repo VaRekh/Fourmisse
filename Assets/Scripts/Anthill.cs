@@ -7,7 +7,7 @@ namespace Assets.Scripts
     public class Anthill : MonoBehaviour
     {
         [SerializeField]
-        private uint load;
+        private UintReference load;
 
         public Storage Storage { get; private set; }
 

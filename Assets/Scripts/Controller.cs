@@ -18,6 +18,15 @@ namespace Assets.Scripts
 
         private Updater<ControllerStateCode, ControllerInfo> controller_updater;
 
+        public Transform Anthill
+        {
+            set
+            {
+                info.Anthill = value;
+            }
+        }
+
+
         // Start is called before the first frame update
         private void Start()
         {
@@ -26,7 +35,7 @@ namespace Assets.Scripts
             var parent_transform = transform.parent;
             Assert.IsNotNull(parent_transform);
 
-            var pheromone_detector = GetComponentsInChildren<PheromoneDetector>(parent_transform);
+            var pheromone_detector = RetrieveComponentsInChildren<PheromoneDetector>(parent_transform);
             var detector = pheromone_detector.Detector;
             Assert.IsNotNull(detector);
 
@@ -48,9 +57,9 @@ namespace Assets.Scripts
             Assert.IsNotNull(pheromone_detection_area);
 
 
-            var collectable_detector = GetComponentsInChildren<CollectableDetector>(parent_transform);
+            var collectable_detector = RetrieveComponentsInChildren<CollectableDetector>(parent_transform);
 
-            var collector = GetComponentsInChildren<Collector>(parent_transform);
+            var collector = RetrieveComponentsInChildren<Collector>(parent_transform);
 
             var collector_completely_emptied_event = new UnityEventSubscription
             {
@@ -64,7 +73,7 @@ namespace Assets.Scripts
                 StopListeningToUnityEvent = collector.StopListeningToCollectorCompletelyLoaded
             };
 
-            var storage_detector = GetComponentsInChildren<StorageDetector>(parent_transform);
+            var storage_detector = RetrieveComponentsInChildren<StorageDetector>(parent_transform);
 
             info.Init
             (
@@ -81,10 +90,9 @@ namespace Assets.Scripts
 
             ControllerFactory controller_factory = new ControllerFactory();
             controller_updater = new Updater<ControllerStateCode, ControllerInfo>(info, controller_factory, ControllerStateCode.Seek);
-            controller_updater.StateChanged.AddListener(OnStateChanged);
             controller_updater.Start();
 
-            static T GetComponentsInChildren<T>(Transform parent_transform)
+            static T RetrieveComponentsInChildren<T>(Transform parent_transform)
                 where T : MonoBehaviour
             {
                 var components = parent_transform.GetComponentsInChildren<T>();
@@ -104,11 +112,6 @@ namespace Assets.Scripts
         private void FixedUpdate()
         {
             controller_updater.FixedUpdate(Time.fixedDeltaTime);
-        }
-
-        private void OnStateChanged(ControllerStateCode new_state)
-        {
-            print(System.Enum.GetName(typeof(ControllerStateCode), new_state));
         }
     }
 }

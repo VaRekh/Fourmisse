@@ -73,6 +73,15 @@ namespace Assets.Library.StateMachines.Controller
         public SeekTacticianInfo SeekTacticianInfo
             => seek_tactician_info;
 
+        public Transform Anthill
+        { 
+            set
+            {
+                anthill = value;
+                Assert.IsNotNull(anthill);
+            }
+        }
+
         public Vector2 AnthillPosition
         {
             get
