@@ -17,8 +17,17 @@ namespace Assets.Library
         [SerializeField]
         private UnityEvent became_full = new();
 
-        public uint Capacity
-            => capacity;
+        public bool IsFull
+            => current_value == capacity;
+
+        public bool IsNotFull
+            => !IsFull;
+
+        public bool IsEmpty
+            => current_value == 0U;
+
+        public bool IsNotEmpty
+            => !IsEmpty;
 
         public uint CurrentValue
         {

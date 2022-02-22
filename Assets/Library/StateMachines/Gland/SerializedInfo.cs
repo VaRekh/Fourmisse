@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Assertions;
 
 namespace Assets.Library.StateMachines.Gland
 {
@@ -18,20 +19,21 @@ namespace Assets.Library.StateMachines.Gland
         [SerializeField]
         public Transform? GenerationPosition;
 
-        public Info Build
-        (
-            UnityEvent<Collectable> contact_with_collectable_lost,
-            UnityEvent<Storage> contact_with_storage_happened
-        )
+        public Info Build(NonSerializedInfo non_serialized_info)
         {
             var info = new Info
             (
                 this,
-                contact_with_collectable_lost,
-                contact_with_storage_happened
+                non_serialized_info
             );
 
             return info;
+        }
+        public void CheckValidity()
+        {
+            _ = new StrictlyPositiveFloat(GeneratedPheromonePerSecond);
+            Assert.IsNotNull(GenerationPosition);
+            Assert.IsNotNull(PheromoneTemplate);
         }
     }
 }

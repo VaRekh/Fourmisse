@@ -51,7 +51,7 @@ namespace Assets.Library.StateMachines.Collector.States
                 is_collectable_empty = load_acquired == 0U;
             }
 
-            bool is_capacity_full = Info.Load.CurrentValue == Info.Load.Capacity;
+            bool is_capacity_full = Info.Load.IsFull;
 
             if (is_capacity_full || is_collectable_empty)
             {

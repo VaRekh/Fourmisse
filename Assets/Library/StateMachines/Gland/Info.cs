@@ -12,29 +12,36 @@ namespace Assets.Library.StateMachines.Gland
         public Info
         (
             SerializedInfo serialized_info,
-            UnityEvent<Collectable> contact_with_collectable_lost,
-            UnityEvent<Storage> contact_with_storage_happened
+            NonSerializedInfo non_serialized_info
         )
         {
             Assert.IsNotNull(serialized_info);
-            _ = new StrictlyPositiveFloat(serialized_info.GeneratedPheromonePerSecond);
-            Assert.IsNotNull(serialized_info.GenerationPosition);
-            Assert.IsNotNull(serialized_info.PheromoneTemplate);
-            Assert.IsNotNull(contact_with_collectable_lost);
-            Assert.IsNotNull(contact_with_storage_happened);
+            serialized_info.CheckValidity();
+            non_serialized_info.CheckValidity();
 
             SerializedInfo = serialized_info;
-            ContactWithCollectableLost = contact_with_collectable_lost;
-            ContactWithStorageHappened = contact_with_storage_happened;
+            NonSerializedInfo = non_serialized_info;
 
             Assert.IsNotNull(SerializedInfo);
-            Assert.IsNotNull(ContactWithCollectableLost);
-            Assert.IsNotNull(ContactWithStorageHappened);
+            SerializedInfo.CheckValidity();
+            NonSerializedInfo.CheckValidity();
         }
         
         private SerializedInfo SerializedInfo { get; set; }
-        private UnityEvent<Collectable> ContactWithCollectableLost { get; set; }
-        private UnityEvent<Storage> ContactWithStorageHappened { get; set; }
+        private NonSerializedInfo NonSerializedInfo { get; set; }
+        private UnityEvent<Collectable> ContactWithCollectableLost
+            => NonSerializedInfo.ContactWithCollectableLost;
+        private UnityEvent<Storage> ContactWithStorageHappened
+            => NonSerializedInfo.ContactWithStorageHappened;
+        private UnityEvent<Collectable> ContactWithNonEmptyCollectableHappened
+            => NonSerializedInfo.ContactWithNonEmptyCollectableHappened;
+        private BoundedUint Load
+            => NonSerializedInfo.Load;
+        private UnityAction<GameObject, Identifier, float> InitPheromone
+            => NonSerializedInfo.InitPheromone;
+        private Identifier Identifier
+            => NonSerializedInfo.Identifier;
+
         private GameObject PheromoneTemplate
         {
             get
@@ -63,10 +70,23 @@ namespace Assets.Library.StateMachines.Gland
         public float PheromoneProductionTimeInSecond
             => 1f / GeneratedPheromonePerSecond;
 
+        public bool CollectorIsNotFull
+            => Load.IsNotFull;
+
 
         private Vector2 GenerationPosition
             => GenerationTransform.position;
 
+
+        public void ListenToContactWithNonEmptyCollectableHappened(UnityAction<Collectable> listener)
+        {
+            ContactWithNonEmptyCollectableHappened.AddListener(listener);
+        }
+
+        public void StopListeningToContactWithNonEmptyCollectableHappened(UnityAction<Collectable> listener)
+        {
+            ContactWithNonEmptyCollectableHappened.RemoveListener(listener);
+        }
 
         public void ListenToLossOfContactWithCollectable(UnityAction<Collectable> listener)
         {
@@ -88,14 +108,17 @@ namespace Assets.Library.StateMachines.Gland
             ContactWithStorageHappened.RemoveListener(listener);
         }
 
-        public GameObject InstantiatePheromone()
+        public GameObject InstantiatePheromone(float intensity)
         {
-            return GameObject.Instantiate
+            var pheromone =  GameObject.Instantiate
             (
                 PheromoneTemplate,
                 GenerationPosition,
                 PheromoneTemplate.transform.rotation
             );
+
+            InitPheromone(pheromone, Identifier, intensity);
+            return pheromone;
         }
     }
 }

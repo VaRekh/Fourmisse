@@ -24,12 +24,18 @@ namespace Assets.Library.StateMachines.Collector.States
 
         public void OnContactWithNonEmptyCollectableHappenned(Collectable collectable)
         {
-            Updater.Change(StateCode.Collect, collectable);
+            if (Info.Load.IsNotFull)
+            {
+                Updater.Change(StateCode.Collect, collectable);
+            }
         }
 
         public void OnContactWithStorageHappened(Storage storage)
         {
-            Updater.Change(StateCode.Dump, storage);
+            if (Info.Load.IsNotEmpty)
+            {
+                Updater.Change(StateCode.Dump, storage);
+            }
         }
     }
 }

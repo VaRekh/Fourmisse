@@ -11,7 +11,7 @@ namespace Assets.Scripts
 
         public Storage Storage { get; private set; }
 
-        private void Start()
+        private void Awake()
         {
             Storage = new Storage(load);
         }

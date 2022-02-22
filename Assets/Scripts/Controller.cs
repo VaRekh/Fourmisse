@@ -84,7 +84,8 @@ namespace Assets.Scripts
                 collectable_detector.ContactWithNonEmptyCollectableHappened,
                 collector_completely_emptied_event,
                 collector_completely_loaded_event,
-                storage_detector.ContactWithStorageHappened
+                storage_detector.ContactWithStorageHappened,
+                collector.Load
             );
             
 

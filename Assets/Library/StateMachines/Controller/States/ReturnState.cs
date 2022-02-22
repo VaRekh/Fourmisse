@@ -12,6 +12,7 @@ namespace Assets.Library.StateMachines.Controller.States
         {
             Updater.StateChanged.Invoke(StateCode.Return);
             Info.ListenToContactWithStorageHappened(OnContactWithStorageHappened);
+            Info.ListenToContactWithNonEmptyCollectableHappened(OnContactWithNonEmptyCollectableHappened);
 
             Vector2 normalized_direction = ComputeNormalizedDirection(Info.AntPosition, Info.AnthillPosition);
             Info.Rigidbody.ChangeDirection(Info.Movespeed, normalized_direction);
@@ -28,11 +29,20 @@ namespace Assets.Library.StateMachines.Controller.States
         public override void Exit()
         {
             Info.StopListeningToContactWithStorageHappened(OnContactWithStorageHappened);
+            Info.StopListeningToContactWithNonEmptyCollectableHappened(OnContactWithNonEmptyCollectableHappened);
         }
 
         public void OnContactWithStorageHappened(Storage storage)
         {
             Updater.Change(StateCode.Idle);
+        }
+
+        public void OnContactWithNonEmptyCollectableHappened(Collectable collectable)
+        {
+            if (Info.CollectorIsNotFull)
+            {
+                Updater.Change(StateCode.Idle);
+            }
         }
     }
 }

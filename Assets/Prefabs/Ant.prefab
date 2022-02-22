@@ -119,9 +119,6 @@ MonoBehaviour:
           m_Calls: []
     resource_layer: {fileID: 11400000, guid: f532ed398f97c6e469f695b4ef18e982, type: 2}
     anthill_layer: {fileID: 11400000, guid: 0f6410393aecc514b8c21d89e663dbdb, type: 2}
-  StateChanged:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &1572199201547854594
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,7 +215,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1572199203428542270}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.598151, y: 0.06786644, z: -2.2229388}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

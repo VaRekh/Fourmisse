@@ -539,14 +539,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1805850625, guid: 53ae51b36ba813a459e8c51a1e6df7c1, type: 3}
-      propertyPath: load
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1805850625, guid: 53ae51b36ba813a459e8c51a1e6df7c1, type: 3}
-      propertyPath: load.Value
-      value: 20
-      objectReference: {fileID: 0}
     - target: {fileID: 1778288178579054566, guid: 53ae51b36ba813a459e8c51a1e6df7c1, type: 3}
       propertyPath: m_Name
       value: Food
@@ -732,7 +724,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1805850625, guid: 53ae51b36ba813a459e8c51a1e6df7c1, type: 3}
       propertyPath: load.Value
-      value: 20
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1778288178579054566, guid: 53ae51b36ba813a459e8c51a1e6df7c1, type: 3}
       propertyPath: m_Name

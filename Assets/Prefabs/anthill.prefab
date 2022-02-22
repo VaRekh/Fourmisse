@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7984687912658353078}
   - component: {fileID: 6807545298751897563}
   - component: {fileID: 328984450024492033}
+  - component: {fileID: 1904539861}
   m_Layer: 8
   m_Name: anthill
   m_TagString: Untagged
@@ -28,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6807545298386445198}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.21, y: -2.63, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -125,7 +126,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 810c24ce08795fb4394caf8db91854db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  load: 0
+  load:
+    Value: 0
 --- !u!114 &328984450024492033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,3 +141,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AntTemplate: {fileID: 1572199203428542270, guid: cd3ed418a6399f44d80c9d7182acb040, type: 3}
+  ant_count_at_start: 2
+  ant_count_generated_when_enough_resources: 1
+  ant_production_cost: 20
+--- !u!114 &1904539861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6807545298386445198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 690ba3307e5929d42910b371b81f9f9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

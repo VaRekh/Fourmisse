@@ -14,7 +14,8 @@ namespace Assets.Library.StateMachines.Gland.States
         public override void Enter(params object[] data)
         {
             Updater.StateChanged.Invoke(StateCode.Production);
-            Info.ListenToContactWithStorage(OnContact);
+            Info.ListenToContactWithStorage(OnContactWithStorage);
+            Info.ListenToContactWithNonEmptyCollectableHappened(OnContactWithNonEmptyCollectableHappened);
             stopwatch.Reset(Info.PheromoneProductionTimeInSecond);
         }
 
@@ -25,19 +26,28 @@ namespace Assets.Library.StateMachines.Gland.States
 
             if (is_time_to_generate)
             {
-                Info.InstantiatePheromone();
+                Info.InstantiatePheromone(10f);
                 stopwatch.Reset();
             }
         }
 
         public override void Exit()
         {
-            Info.StopListeningToContactWithStorage(OnContact);
+            Info.StopListeningToContactWithStorage(OnContactWithStorage);
+            Info.StopListeningToContactWithNonEmptyCollectableHappened(OnContactWithNonEmptyCollectableHappened);
         }
         
-        private void OnContact(Storage storage)
+        private void OnContactWithStorage(Storage storage)
         {
             Updater.Change(StateCode.Idle);
+        }
+
+        private void OnContactWithNonEmptyCollectableHappened(Collectable collectable)
+        {
+            if (Info.CollectorIsNotFull)
+            {
+                Updater.Change(StateCode.Idle);
+            }
         }
     }
 }

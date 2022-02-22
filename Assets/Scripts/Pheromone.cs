@@ -14,16 +14,23 @@ namespace Assets.Scripts
         [Tooltip("[O - 100] %")]
         [Range(0f, 100f)]
         private float minimum_size_percentage;
+        private FadingEntity FadingEntity { get; set; }
 
         public Entity Entity { get; private set; }
-        public FadingEntity FadingEntity { get; private set; }
-
+        public Identifier AntIdentifier { get; private set; }
+        public float Intensity { get; private set; }
 
         private void Start()
         {
             Entity = new Entity(transform);
             FadingEntity = new FadingEntity(transform.localScale, lifespan, minimum_size_percentage);
             FadingEntity.IsFaded.AddListener(DestroyGameObject);
+        }
+
+        public void Init(Identifier ant_identifier, float intensity)
+        {
+            AntIdentifier = ant_identifier;
+            Intensity = intensity;
         }
 
         private void Update()

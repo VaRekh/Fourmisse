@@ -97,6 +97,11 @@ namespace Assets.Library.StateMachines.Controller
         public Rigidbody2D Rigidbody
             => shared_info.Rigidbody;
 
+        private BoundedUint Load { get; set; }
+
+        public bool CollectorIsNotFull
+            => Load.IsNotFull;
+
         #region Subscribe/Unsubscribed
         private UnityEvent<Collectable> ContactWithNonEmptyCollectableHappened { get; set; }
 
@@ -160,7 +165,8 @@ namespace Assets.Library.StateMachines.Controller
             UnityEvent<Collectable>? contact_with_non_empty_collectable_happened,
             UnityEventSubscription collector_completely_emptied,
             UnityEventSubscription collector_completely_loaded,
-            UnityEvent<Storage> contact_with_storage_happened
+            UnityEvent<Storage> contact_with_storage_happened,
+            BoundedUint load
         )
         {
             shared_info.Init(rigidbody, ant);
@@ -169,6 +175,7 @@ namespace Assets.Library.StateMachines.Controller
             CollectorCompletelyEmptied = collector_completely_emptied;
             CollectorCompletelyLoaded = collector_completely_loaded;
             ContactWithStorageHappened = contact_with_storage_happened;
+            Load = load;
         }
     }
 }

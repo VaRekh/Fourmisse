@@ -19,13 +19,21 @@ namespace Tests.Library.Data
             public Transform GenerationPosition { get; set; }
             public GameObject PheromoneTemplate { get; set; }
             public UnityEvent<Collectable> ContactWithCollectableLost { get; set; }
+            public UnityEvent<Collectable> ContactWithNonEmptyCollectableHappened { get; set; }
             public UnityEvent<Storage> ContactWithStorageHappened { get; set; }
+            public BoundedUint Load { get; set; }
+            public UnityAction<GameObject, Identifier, float> InitPheromone { get; set; }
+            public Identifier Identifier { get; set; }
         }
 
         private struct SerializedInfoBuildParameters
         {
             public UnityEvent<Collectable> ContactWithCollectableLost { get; set; }
+            public UnityEvent<Collectable> ContactWithNonEmptyCollectableHappened { get; set; }
             public UnityEvent<Storage> ContactWithStorageHappened { get; set; }
+            public BoundedUint Load { get; set; }
+            public UnityAction<GameObject, Identifier, float> InitPheromone { get; set; }
+            public Identifier Identifier { get; set; }
         }
 
         private Transform MakeDefaultTransform()
@@ -34,6 +42,8 @@ namespace Tests.Library.Data
             var transform = game_object.transform;
             return transform;
         }
+
+
 
         private GlandInfoConstructorParameters MakeGlandInfoDefaultParameters()
         {
@@ -44,7 +54,11 @@ namespace Tests.Library.Data
                 GenerationPosition = serialized_info.GenerationPosition,
                 PheromoneTemplate = serialized_info.PheromoneTemplate,
                 ContactWithCollectableLost = new UnityEvent<Collectable>(),
-                ContactWithStorageHappened = new UnityEvent<Storage>()
+                ContactWithNonEmptyCollectableHappened = new UnityEvent<Collectable>(),
+                ContactWithStorageHappened = new UnityEvent<Storage>(),
+                Load = new BoundedUint(),
+                InitPheromone = (GameObject pheromone, Identifier identifier, float intensity) => { },
+                Identifier = new Identifier()
             };
         }
 
@@ -56,11 +70,19 @@ namespace Tests.Library.Data
                 GenerationPosition = parameters.GenerationPosition,
                 PheromoneTemplate = parameters.PheromoneTemplate
             };
+            var non_serialized_info = new NonSerializedInfo
+            {
+                ContactWithCollectableLost = parameters.ContactWithCollectableLost,
+                ContactWithNonEmptyCollectableHappened = parameters.ContactWithNonEmptyCollectableHappened,
+                ContactWithStorageHappened = parameters.ContactWithStorageHappened,
+                Load = parameters.Load,
+                InitPheromone = parameters.InitPheromone,
+                Identifier = parameters.Identifier
+            };
             return new Info
             (
                 serialized_info,
-                parameters.ContactWithCollectableLost,
-                parameters.ContactWithStorageHappened
+                non_serialized_info
             );
         }
 
@@ -74,12 +96,14 @@ namespace Tests.Library.Data
             };
         }
 
-        private SerializedInfoBuildParameters MakeSerializedInfoBuildDefaultValueParameters()
+        private SerializedInfoBuildParameters MakeSerializedInfoBuildDefaultValidParameters()
         {
             return new SerializedInfoBuildParameters
             {
                 ContactWithCollectableLost = new UnityEvent<Collectable>(),
-                ContactWithStorageHappened = new UnityEvent<Storage>()
+                ContactWithNonEmptyCollectableHappened = new UnityEvent<Collectable>(),
+                ContactWithStorageHappened = new UnityEvent<Storage>(),
+                Load = new BoundedUint()
             };
         }
 
@@ -180,7 +204,7 @@ namespace Tests.Library.Data
             var parameters = MakeGlandInfoDefaultParameters();
             var info = MakeGlandInfo(parameters);
 
-            var pheromone = info.InstantiatePheromone();
+            var pheromone = info.InstantiatePheromone(0f);
 
             Assert.That
             (
@@ -206,7 +230,7 @@ namespace Tests.Library.Data
             parameters.GenerationPosition.position = new Vector3(position_x, position_y);
             var info = MakeGlandInfo(parameters);
 
-            var pheromone = info.InstantiatePheromone();
+            var pheromone = info.InstantiatePheromone(0f);
 
             Assert.That
             (
@@ -225,7 +249,7 @@ namespace Tests.Library.Data
             parameters.PheromoneTemplate.transform.rotation = Quaternion.Euler(0f, 0f, rotation_z);
             var info = MakeGlandInfo(parameters);
 
-            var pheromone = info.InstantiatePheromone();
+            var pheromone = info.InstantiatePheromone(0f);
 
             Assert.That
             (
@@ -237,7 +261,7 @@ namespace Tests.Library.Data
         [Test]
         public void WhenPheromoneTemplateIsInvalid_SerializedInfoShouldFailInBuildingInfo()
         {
-            var build_parameters = MakeSerializedInfoBuildDefaultValueParameters();
+            var build_parameters = MakeSerializedInfoBuildDefaultValidParameters();
             var serialized_info = MakeSerializedInfoDefaultValidParameters();
             serialized_info.PheromoneTemplate = null;
             Assert.That
@@ -246,8 +270,15 @@ namespace Tests.Library.Data
                 {
                     serialized_info.Build
                     (
-                        build_parameters.ContactWithCollectableLost,
-                        build_parameters.ContactWithStorageHappened
+                        new NonSerializedInfo
+                        {
+                            ContactWithCollectableLost = build_parameters.ContactWithCollectableLost,
+                            ContactWithNonEmptyCollectableHappened = build_parameters.ContactWithNonEmptyCollectableHappened,
+                            ContactWithStorageHappened = build_parameters.ContactWithStorageHappened,
+                            Load = build_parameters.Load,
+                            InitPheromone = build_parameters.InitPheromone,
+                            Identifier = build_parameters.Identifier
+                        }
                     );
                 },
                 Throws.InstanceOf<UnityAssertionException>()
@@ -261,7 +292,7 @@ namespace Tests.Library.Data
             [Values(-2f, -1f, 0f)] float generated_pheromone_per_second
         )
         {
-            var build_parameters = MakeSerializedInfoBuildDefaultValueParameters();
+            var build_parameters = MakeSerializedInfoBuildDefaultValidParameters();
             var serialized_info = MakeSerializedInfoDefaultValidParameters();
             serialized_info.GeneratedPheromonePerSecond = generated_pheromone_per_second;
 
@@ -271,8 +302,15 @@ namespace Tests.Library.Data
                 {
                     serialized_info.Build
                     (
-                        build_parameters.ContactWithCollectableLost,
-                        build_parameters.ContactWithStorageHappened
+                        new NonSerializedInfo
+                        {
+                            ContactWithCollectableLost = build_parameters.ContactWithCollectableLost,
+                            ContactWithNonEmptyCollectableHappened = build_parameters.ContactWithNonEmptyCollectableHappened,
+                            ContactWithStorageHappened = build_parameters.ContactWithStorageHappened,
+                            Load = build_parameters.Load,
+                            InitPheromone = build_parameters.InitPheromone,
+                            Identifier = build_parameters.Identifier
+                        }
                     );
                 },
                 Throws.InstanceOf<UnityAssertionException>()
@@ -283,7 +321,7 @@ namespace Tests.Library.Data
         [Test]
         public void WhenGenerationPositionIsInvalid_SerializedInfoShouldFailInBuildingInfo()
         {
-            var build_parameters = MakeSerializedInfoBuildDefaultValueParameters();
+            var build_parameters = MakeSerializedInfoBuildDefaultValidParameters();
             var serialized_info = MakeSerializedInfoDefaultValidParameters();
 
             serialized_info.GenerationPosition = null;
@@ -294,8 +332,15 @@ namespace Tests.Library.Data
                 {
                     serialized_info.Build
                     (
-                        build_parameters.ContactWithCollectableLost,
-                        build_parameters.ContactWithStorageHappened
+                        new NonSerializedInfo
+                        {
+                            ContactWithCollectableLost = build_parameters.ContactWithCollectableLost,
+                            ContactWithNonEmptyCollectableHappened = build_parameters.ContactWithNonEmptyCollectableHappened,
+                            ContactWithStorageHappened = build_parameters.ContactWithStorageHappened,
+                            Load = build_parameters.Load,
+                            InitPheromone = build_parameters.InitPheromone,
+                            Identifier = build_parameters.Identifier
+                        }
                     );
                 },
                 Throws.InstanceOf<UnityAssertionException>()
@@ -306,7 +351,7 @@ namespace Tests.Library.Data
         [Test]
         public void WhenDataIsValid_SerializedInfoShouldSucceedInBuildingInfo()
         {
-            var build_parameters = MakeSerializedInfoBuildDefaultValueParameters();
+            var build_parameters = MakeSerializedInfoBuildDefaultValidParameters();
             var serialized_info = MakeSerializedInfoDefaultValidParameters();
             Info? info = null;
 
@@ -316,8 +361,15 @@ namespace Tests.Library.Data
                 {
                     info = serialized_info.Build
                     (
-                        build_parameters.ContactWithCollectableLost,
-                        build_parameters.ContactWithStorageHappened
+                        new NonSerializedInfo
+                        {
+                            ContactWithCollectableLost = build_parameters.ContactWithCollectableLost,
+                            ContactWithNonEmptyCollectableHappened = build_parameters.ContactWithNonEmptyCollectableHappened,
+                            ContactWithStorageHappened = build_parameters.ContactWithStorageHappened,
+                            Load = build_parameters.Load,
+                            InitPheromone = build_parameters.InitPheromone,
+                            Identifier = build_parameters.Identifier
+                        }
                     );
                 },
                 Throws.Nothing

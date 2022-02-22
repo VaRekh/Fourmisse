@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Assertions;
+using Assets.Library;
 using Assets.Library.StateMachines;
 using Assets.Library.StateMachines.Collector;
 using CollectorFactory = Assets.Library.StateMachines.Collector.Factory;
@@ -12,6 +13,9 @@ namespace Assets.Scripts
     {
         [SerializeField]
         private CollectorInfo info;
+
+        public BoundedUint Load
+            => info.Load;
 
         public void ListenToCollectorCompletelyEmptied(UnityAction listener)
             => info.ListenToCollectorCompletelyEmptied(listener);
@@ -26,14 +30,11 @@ namespace Assets.Scripts
 
         private Updater<StateCode, CollectorInfo> collect_updater;
 
-        public UnityEvent<StateCode> StateChanged;
 
 
         // Start is called before the first frame update
         private void Start()
         {
-            StateChanged = new UnityEvent<StateCode>();
-
             CollectorFactory collector_factory = new CollectorFactory();
 
 
@@ -52,7 +53,6 @@ namespace Assets.Scripts
             );
 
             collect_updater = new Updater<StateCode, CollectorInfo>(info, collector_factory);
-            collect_updater.StateChanged.AddListener(ReactToStateChanged);
             collect_updater.Start();
 
 
@@ -71,11 +71,6 @@ namespace Assets.Scripts
         private void Update()
         {
             collect_updater.Update(Time.deltaTime);
-        }
-
-        private void ReactToStateChanged(StateCode new_state)
-        {
-            StateChanged.Invoke(new_state);
         }
     }
 }
