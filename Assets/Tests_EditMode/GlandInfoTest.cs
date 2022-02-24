@@ -22,7 +22,7 @@ namespace Tests.Library.Data
             public UnityEvent<Collectable> ContactWithNonEmptyCollectableHappened { get; set; }
             public UnityEvent<Storage> ContactWithStorageHappened { get; set; }
             public BoundedUint Load { get; set; }
-            public UnityAction<GameObject, Identifier, float> InitPheromone { get; set; }
+            public UnityAction<GameObject, Identifier, uint> InitPheromone { get; set; }
             public Identifier Identifier { get; set; }
         }
 
@@ -32,7 +32,7 @@ namespace Tests.Library.Data
             public UnityEvent<Collectable> ContactWithNonEmptyCollectableHappened { get; set; }
             public UnityEvent<Storage> ContactWithStorageHappened { get; set; }
             public BoundedUint Load { get; set; }
-            public UnityAction<GameObject, Identifier, float> InitPheromone { get; set; }
+            public UnityAction<GameObject, Identifier, uint> InitPheromone { get; set; }
             public Identifier Identifier { get; set; }
         }
 
@@ -48,16 +48,20 @@ namespace Tests.Library.Data
         private GlandInfoConstructorParameters MakeGlandInfoDefaultParameters()
         {
             var serialized_info = MakeSerializedInfoDefaultValidParameters();
+            Assert.IsNotNull(serialized_info.GenerationPosition);
+            Assert.IsNotNull(serialized_info.PheromoneTemplate);
             return new GlandInfoConstructorParameters
             {
                 GeneratedPheromonePerSecond = serialized_info.GeneratedPheromonePerSecond,
+#pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
                 GenerationPosition = serialized_info.GenerationPosition,
                 PheromoneTemplate = serialized_info.PheromoneTemplate,
+#pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
                 ContactWithCollectableLost = new UnityEvent<Collectable>(),
                 ContactWithNonEmptyCollectableHappened = new UnityEvent<Collectable>(),
                 ContactWithStorageHappened = new UnityEvent<Storage>(),
                 Load = new BoundedUint(),
-                InitPheromone = (GameObject pheromone, Identifier identifier, float intensity) => { },
+                InitPheromone = (GameObject pheromone, Identifier identifier, uint intensity) => { },
                 Identifier = new Identifier()
             };
         }
@@ -103,7 +107,8 @@ namespace Tests.Library.Data
                 ContactWithCollectableLost = new UnityEvent<Collectable>(),
                 ContactWithNonEmptyCollectableHappened = new UnityEvent<Collectable>(),
                 ContactWithStorageHappened = new UnityEvent<Storage>(),
-                Load = new BoundedUint()
+                Load = new BoundedUint(),
+                InitPheromone = (GameObject pheromone, Identifier identifier, uint intensity) => { }
             };
         }
 
@@ -204,7 +209,7 @@ namespace Tests.Library.Data
             var parameters = MakeGlandInfoDefaultParameters();
             var info = MakeGlandInfo(parameters);
 
-            var pheromone = info.InstantiatePheromone(0f);
+            var pheromone = info.InstantiatePheromone(new Intensity(0u));
 
             Assert.That
             (
@@ -230,7 +235,7 @@ namespace Tests.Library.Data
             parameters.GenerationPosition.position = new Vector3(position_x, position_y);
             var info = MakeGlandInfo(parameters);
 
-            var pheromone = info.InstantiatePheromone(0f);
+            var pheromone = info.InstantiatePheromone(new Intensity(0u));
 
             Assert.That
             (
@@ -249,7 +254,7 @@ namespace Tests.Library.Data
             parameters.PheromoneTemplate.transform.rotation = Quaternion.Euler(0f, 0f, rotation_z);
             var info = MakeGlandInfo(parameters);
 
-            var pheromone = info.InstantiatePheromone(0f);
+            var pheromone = info.InstantiatePheromone(new Intensity(0u));
 
             Assert.That
             (

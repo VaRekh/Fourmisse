@@ -36,9 +36,9 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician
         [SerializeField][HideInInspector]
         private Collider2D collider;
         [SerializeField][HideInInspector]
-        private Detector pheromone_detector;
+        private Detector<PheromoneInfo> pheromone_detector;
 
-        private readonly HashSet<Entity> tracked_pheromones = new HashSet<Entity>();
+        private readonly HashSet<PheromoneInfo> tracked_pheromones = new HashSet<PheromoneInfo>();
 
         private ControllerInfo.SharedInfo SharedInfo
         {
@@ -83,7 +83,7 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician
         public Rigidbody2D Rigidbody
             => shared_info.Rigidbody;
 
-        private  Detector PheromoneDetector
+        private  Detector<PheromoneInfo> PheromoneDetector
         {
             set
             {
@@ -92,17 +92,17 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician
             }
         }
 
-        public void Init(ControllerInfo.SharedInfo shared_info, Collider2D pheromone_detection_area, Detector pheromone_detector)
+        public void Init(ControllerInfo.SharedInfo shared_info, Collider2D pheromone_detection_area, Detector<PheromoneInfo> pheromone_detector)
         {
             SharedInfo = shared_info;
             Collider = pheromone_detection_area;
             PheromoneDetector = pheromone_detector;
         }
 
-        public HashSet<Entity> TrackedPheromones
+        public HashSet<PheromoneInfo> TrackedPheromones
             => tracked_pheromones;
 
-        public UnityEvent<Entity, List<Entity>> PheromoneAppeared
+        public UnityEvent<PheromoneInfo, List<PheromoneInfo>> PheromoneAppeared
         {
             get
             {
@@ -111,7 +111,7 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician
             }
         }
 
-        public UnityEvent<Entity, List<Entity>> PheromoneVanished
+        public UnityEvent<PheromoneInfo, List<PheromoneInfo>> PheromoneVanished
         {
             get
             {
@@ -120,7 +120,7 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician
             }
         }
 
-        public List<Entity> DetectedPheromones
+        public List<PheromoneInfo> DetectedPheromones
         {
             get
             {
@@ -129,22 +129,22 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician
             }
         }
 
-        public void AddToTrackedPheromones(Entity pheromone)
+        public void AddToTrackedPheromones(PheromoneInfo pheromone)
             => TrackedPheromones.Add(pheromone);
 
         public void ClearTrackedPheromones()
             => TrackedPheromones.Clear();
 
-        public Entity GetNearestPheromone(List<Entity> pheromones)
+        public PheromoneInfo GetNearestPheromone(List<PheromoneInfo> pheromones)
         {
             Vector2 ant_collider_position = Collider.transform.position;
-            Entity nearest_pheromone = pheromone_detector.GetNearestEntity(pheromones, ant_collider_position);
+            PheromoneInfo nearest_pheromone = pheromone_detector.GetNearestEntity(pheromones, ant_collider_position);
             return nearest_pheromone;
         }
 
-        public List<Entity> GetUntrackedPheromones(List<Entity> pheromones, HashSet<Entity> tracked_pheromones)
+        public List<PheromoneInfo> GetUntrackedPheromones(List<PheromoneInfo> pheromones, HashSet<PheromoneInfo> tracked_pheromones)
         {
-            List<Entity> untracked_pheromones = pheromone_detector.GetUntrackedEntities(pheromones, tracked_pheromones);
+            List<PheromoneInfo> untracked_pheromones = pheromone_detector.GetUntrackedEntities(pheromones, tracked_pheromones);
             return untracked_pheromones;
         }
     }

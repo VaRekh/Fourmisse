@@ -15,7 +15,7 @@
 
         public override void Update(float delta_time)
         {
-            Entity nearest_pheromone = Info.GetNearestPheromone(Info.DetectedPheromones);
+            PheromoneInfo nearest_pheromone = Info.GetNearestPheromone(Info.DetectedPheromones);
 
             if (nearest_pheromone == null)
             {

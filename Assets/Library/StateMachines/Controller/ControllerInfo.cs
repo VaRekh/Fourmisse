@@ -65,7 +65,7 @@ namespace Assets.Library.StateMachines.Controller
         [SerializeField]
         private Transform anthill;
         [SerializeField][HideInInspector]
-        private Detector pheromone_detector;
+        private Detector<PheromoneInfo> pheromone_detector;
 
         public float Movespeed
             => shared_info.Movespeed;
@@ -161,7 +161,7 @@ namespace Assets.Library.StateMachines.Controller
             Collider2D pheromone_detection_area,
             Rigidbody2D rigidbody,
             Transform ant,
-            Detector pheromone_detector,
+            Detector<PheromoneInfo> pheromone_detector,
             UnityEvent<Collectable>? contact_with_non_empty_collectable_happened,
             UnityEventSubscription collector_completely_emptied,
             UnityEventSubscription collector_completely_loaded,

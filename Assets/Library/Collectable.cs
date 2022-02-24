@@ -8,8 +8,14 @@ namespace Assets.Library
 
         private UnityEvent completely_emtpied = new();
 
+        public uint LoadLeft
+        {
+            get => Load.Value;
+            private set => Load.Value = value;
+        }
+
         public bool IsNotEmpty
-            => Load.Value != 0U;
+            => LoadLeft != 0U;
 
         public Collectable(UintReference load)
         {
@@ -28,12 +34,12 @@ namespace Assets.Library
 
         public uint Collect(uint load_required)
         {
-            bool is_requirement_available = Load.Value >= load_required;
+            bool is_requirement_available = LoadLeft >= load_required;
 
-            uint load_given = is_requirement_available ? load_required : Load.Value;
-            Load.Value -= load_given;
+            uint load_given = is_requirement_available ? load_required : LoadLeft;
+            LoadLeft -= load_given;
 
-            if (Load.Value == 0U)
+            if (LoadLeft == 0U)
             {
                 completely_emtpied.Invoke();
             }

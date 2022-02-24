@@ -44,14 +44,5 @@ namespace Assets.Library.StateMachines
         {
 
         }
-
-        protected static bool CheeckLayer(GameObject game_object, LayerReference layer)
-        {
-            int collided_layer = game_object.layer;
-            int component_layer = layer.Index;
-            bool is_same_layer = collided_layer == component_layer;
-
-            return is_same_layer;
-        }
     }
 }

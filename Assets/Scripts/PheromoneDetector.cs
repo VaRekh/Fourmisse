@@ -8,21 +8,21 @@ namespace Assets.Scripts
     [RequireComponent(typeof(Collider2D))]
     public class PheromoneDetector : MonoBehaviour
     {
-        private Detector detector;
+        private Detector<PheromoneInfo> detector;
 
-        public Detector Detector
+        public Detector<PheromoneInfo> Detector
             => detector;
 
         private void Awake()
         {
-            detector = new Detector();
+            detector = new Detector<PheromoneInfo>();
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
             var pheromone = collision.gameObject.GetComponent<Pheromone>();
             Assert.IsNotNull(pheromone);
-            var entity = pheromone.Entity;
+            var entity = pheromone.info;
             Assert.IsNotNull(entity);
 
             detector.AddAppearingEntity(entity);
@@ -32,7 +32,7 @@ namespace Assets.Scripts
         {
             var pheromone = collision.gameObject.GetComponent<Pheromone>();
             Assert.IsNotNull(pheromone);
-            var entity = pheromone.Entity;
+            var entity = pheromone.info;
             Assert.IsNotNull(entity);
 
             detector.RemoveVanishingEntity(entity);

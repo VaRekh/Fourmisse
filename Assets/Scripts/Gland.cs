@@ -53,7 +53,7 @@ namespace Assets.Scripts
             gland_updater.Update(Time.deltaTime);
         }
 
-        private void InitPheromone(GameObject pheromone, Identifier ant_identifier, float intensity)
+        private void InitPheromone(GameObject pheromone, Identifier ant_identifier, uint intensity)
         {
             pheromone.GetComponent<Pheromone>().Init(ant_identifier, intensity);
         }

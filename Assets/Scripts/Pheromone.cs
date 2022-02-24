@@ -16,21 +16,17 @@ namespace Assets.Scripts
         private float minimum_size_percentage;
         private FadingEntity FadingEntity { get; set; }
 
-        public Entity Entity { get; private set; }
-        public Identifier AntIdentifier { get; private set; }
-        public float Intensity { get; private set; }
+        public PheromoneInfo info { get; private set; }
 
         private void Start()
         {
-            Entity = new Entity(transform);
             FadingEntity = new FadingEntity(transform.localScale, lifespan, minimum_size_percentage);
             FadingEntity.IsFaded.AddListener(DestroyGameObject);
         }
 
-        public void Init(Identifier ant_identifier, float intensity)
+        public void Init(Identifier ant_identifier, uint intensity)
         {
-            AntIdentifier = ant_identifier;
-            Intensity = intensity;
+            info = new PheromoneInfo(ant_identifier, transform, new Intensity(intensity));
         }
 
         private void Update()

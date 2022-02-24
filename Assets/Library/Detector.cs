@@ -5,23 +5,24 @@ using System.Collections.Generic;
 
 namespace Assets.Library
 {
-    public class Detector
+    public class Detector<T>
+        where T : class, ITrackable
     {
-        private HashSet<Entity> DetectedEntities { get; set; }
-        public UnityEvent<Entity, List<Entity>> EntityAppeared { get; private set; }
-        public UnityEvent<Entity, List<Entity>> EntityVanished { get; private set; }
+        private HashSet<T> DetectedEntities { get; set; }
+        public UnityEvent<T, List<T>> EntityAppeared { get; private set; }
+        public UnityEvent<T, List<T>> EntityVanished { get; private set; }
 
-        public List<Entity> DetectedEntitiesAsList
-            => new List<Entity>(DetectedEntities);
+        public List<T> DetectedEntitiesAsList
+            => new List<T>(DetectedEntities);
 
         public Detector()
         {
-            EntityAppeared = new UnityEvent<Entity, List<Entity>>();
-            DetectedEntities = new HashSet<Entity>();
-            EntityVanished = new UnityEvent<Entity, List<Entity>>();
+            EntityAppeared = new UnityEvent<T, List<T>>();
+            DetectedEntities = new HashSet<T>();
+            EntityVanished = new UnityEvent<T, List<T>>();
         }
 
-        public void AddAppearingEntity(Entity entity)
+        public void AddAppearingEntity(T entity)
         {
             Assert.IsNotNull(entity);
 
@@ -32,7 +33,7 @@ namespace Assets.Library
             }
         }
 
-        public void RemoveVanishingEntity(Entity entity)
+        public void RemoveVanishingEntity(T entity)
         {
             Assert.IsNotNull(entity);
 
@@ -43,18 +44,18 @@ namespace Assets.Library
             }
         }
 
-        public Entity GetNearestEntity(List<Entity> entities, Vector2 ant_collider_position)
+        public T GetNearestEntity(List<T> entities, Vector2 ant_collider_position)
         {
             Assert.IsNotNull(entities);
 
-            Entity nearest_entities = null;
+            T nearest_entities = null;
 
             if (entities.Count > 0)
             {
                 nearest_entities = entities[0];
                 entities.RemoveAt(0);
 
-                foreach (Entity entity in entities)
+                foreach (T entity in entities)
                 {
                     Vector2 nearest_entity_position = nearest_entities.Position;
                     Vector2 from_ant_to_nearest_entity = ant_collider_position.To(nearest_entity_position);
@@ -74,11 +75,11 @@ namespace Assets.Library
             return nearest_entities;
         }
 
-        public List<Entity> GetUntrackedEntities(List<Entity> entities, HashSet<Entity> tracked_entities)
+        public List<T> GetUntrackedEntities(List<T> entities, HashSet<T> tracked_entities)
         {
-            List<Entity> untracked_entities = new List<Entity>();
+            List<T> untracked_entities = new List<T>();
 
-            foreach (Entity candidate in entities)
+            foreach (T candidate in entities)
             {
                 bool is_entity_tracked = tracked_entities.Contains(candidate);
                 if (!is_entity_tracked)

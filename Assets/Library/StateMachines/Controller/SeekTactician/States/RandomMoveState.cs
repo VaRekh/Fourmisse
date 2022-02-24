@@ -53,7 +53,7 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician.States
             Info.PheromoneAppeared.RemoveListener(ReactToPheromoneAppeared);
         }
 
-        private void ReactToPheromoneAppeared(Entity pheromone, List<Entity> pheromones)
+        private void ReactToPheromoneAppeared(PheromoneInfo pheromone, List<PheromoneInfo> pheromones)
         {
             bool has_pheromone_been_tracked = Info.TrackedPheromones.Contains(pheromone);
             if (!has_pheromone_been_tracked)

@@ -37,7 +37,7 @@ namespace Assets.Library.StateMachines.Gland
             => NonSerializedInfo.ContactWithNonEmptyCollectableHappened;
         private BoundedUint Load
             => NonSerializedInfo.Load;
-        private UnityAction<GameObject, Identifier, float> InitPheromone
+        private UnityAction<GameObject, Identifier, uint> InitPheromone
             => NonSerializedInfo.InitPheromone;
         private Identifier Identifier
             => NonSerializedInfo.Identifier;
@@ -108,7 +108,7 @@ namespace Assets.Library.StateMachines.Gland
             ContactWithStorageHappened.RemoveListener(listener);
         }
 
-        public GameObject InstantiatePheromone(float intensity)
+        public GameObject InstantiatePheromone(Intensity intensity)
         {
             var pheromone =  GameObject.Instantiate
             (
@@ -117,7 +117,7 @@ namespace Assets.Library.StateMachines.Gland
                 PheromoneTemplate.transform.rotation
             );
 
-            InitPheromone(pheromone, Identifier, intensity);
+            InitPheromone(pheromone, Identifier, intensity.Value);
             return pheromone;
         }
     }

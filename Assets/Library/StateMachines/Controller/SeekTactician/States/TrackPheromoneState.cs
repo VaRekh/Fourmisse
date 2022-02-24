@@ -6,7 +6,7 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician.States
 {
     public class TrackPheromoneState : State<StateCode, SeekTacticianInfo>
     {
-        private Entity pheromone_to_track;
+        private PheromoneInfo pheromone_to_track;
         private SeekTacticianInfo.ChangeDirectionData change_direction_data;
 
         public TrackPheromoneState(Updater<StateCode, SeekTacticianInfo> updater, SeekTacticianInfo info)
@@ -18,7 +18,7 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician.States
         {
             Updater.StateChanged.Invoke(StateCode.TrackPheromone);
             Assert.IsTrue(data.Length > 0);
-            var pheromone = data[0] as Entity;
+            var pheromone = data[0] as PheromoneInfo;
             Assert.IsNotNull(pheromone);
 
             UpdateTrackingTo(pheromone);
@@ -32,7 +32,7 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician.States
 
             if (is_close_to_pheromone)
             {
-                List<Entity> pheromones = Info.DetectedPheromones;
+                List<PheromoneInfo> pheromones = Info.DetectedPheromones;
                 ReactToPheromoneToTrackUpdates(pheromones);
             }
         }
@@ -51,7 +51,7 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician.States
             Info.PheromoneVanished.RemoveListener(ReactToPheromoneVanished);
         }
 
-        private void ReactToPheromoneVanished(Entity pheromone, List<Entity> pheromones)
+        private void ReactToPheromoneVanished(PheromoneInfo pheromone, List<PheromoneInfo> pheromones)
         {
             if (pheromone == pheromone_to_track)
             {
@@ -59,7 +59,7 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician.States
             }
         }
 
-        private void UpdateTrackingTo(Entity pheromone)
+        private void UpdateTrackingTo(PheromoneInfo pheromone)
         {
             Assert.IsNotNull(pheromone);
             bool is_tracked_pheromone = Info.TrackedPheromones.Contains(pheromone);
@@ -71,11 +71,11 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician.States
             Info.AddToTrackedPheromones(pheromone_to_track);
         }
 
-        private void ReactToPheromoneToTrackUpdates(List<Entity> pheromones)
+        private void ReactToPheromoneToTrackUpdates(List<PheromoneInfo> pheromones)
         {
-            List<Entity> untracked_pheromones = Info.GetUntrackedPheromones(pheromones, Info.TrackedPheromones);
+            List<PheromoneInfo> untracked_pheromones = Info.GetUntrackedPheromones(pheromones, Info.TrackedPheromones);
             untracked_pheromones.Remove(pheromone_to_track);
-            Entity pheromone = Info.GetNearestPheromone(untracked_pheromones);
+            PheromoneInfo pheromone = Info.GetNearestPheromone(untracked_pheromones);
 
             if (pheromone != null)
             {

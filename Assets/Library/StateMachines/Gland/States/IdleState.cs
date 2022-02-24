@@ -19,7 +19,7 @@
 
         private void OnLossOfContact(Collectable collectable)
         {
-            Updater.Change(StateCode.Production);
+            Updater.Change(StateCode.Production, collectable);
         }
     }
 }

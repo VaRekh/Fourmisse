@@ -11,7 +11,7 @@ namespace Assets.Library.StateMachines.Gland
         public UnityEvent<Storage> ContactWithStorageHappened { get; set; }
         public UnityEvent<Collectable> ContactWithNonEmptyCollectableHappened { get; set; }
         public BoundedUint Load { get; set; }
-        public UnityAction<GameObject, Identifier, float> InitPheromone { get; set; }
+        public UnityAction<GameObject, Identifier, uint> InitPheromone { get; set; }
         public Identifier Identifier { get; set; }
 
         public void CheckValidity()
