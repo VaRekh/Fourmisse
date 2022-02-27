@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,11 +13,7 @@ namespace Assets.Library.StateMachines.Collector
         [SerializeField]
         private uint quantity_per_collect;
         [SerializeField]
-        private BoundedUint load;
-        [SerializeField]
-        private LayerReference resource_layer;
-        [SerializeField]
-        private LayerReference anthill_layer;
+        private BoundedUint load = new(); // TODO: need refactoring because assigning a new() to this field is useless as it is later replaced by a real object
 
         public float Speed
             => speed;
@@ -30,14 +27,9 @@ namespace Assets.Library.StateMachines.Collector
             set => load = value;
         }
 
-        public LayerReference ResourceLayer
-            => resource_layer;
-        public LayerReference AnthillLayer
-            => anthill_layer;
+        private UnityEvent<Collectable> ContactWithNonEmptyCollectableHappenned { get; set; } = new();
 
-        private UnityEvent<Collectable> ContactWithNonEmptyCollectableHappenned { get; set; }
-
-        private UnityEvent<Storage> ContactWithStorageHappened { get; set; }
+        private UnityEvent<Storage> ContactWithStorageHappened { get; set; } = new();
 
         public void ListenToCollectorCompletelyEmptied(UnityAction listener)
         {

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#nullable enable
+using UnityEngine;
 using UnityEngine.Assertions;
 using System.Collections.Generic;
 
@@ -9,7 +10,9 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician.States
         private PheromoneInfo pheromone_to_track;
         private SeekTacticianInfo.ChangeDirectionData change_direction_data;
 
+#pragma warning disable CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
         public TrackPheromoneState(Updater<StateCode, SeekTacticianInfo> updater, SeekTacticianInfo info)
+#pragma warning restore CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
             : base(updater, info)
         {
         }
@@ -21,7 +24,9 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician.States
             var pheromone = data[0] as PheromoneInfo;
             Assert.IsNotNull(pheromone);
 
+#pragma warning disable CS8604 // Existence possible d'un argument de référence null.
             UpdateTrackingTo(pheromone);
+#pragma warning restore CS8604 // Existence possible d'un argument de référence null.
             Info.PheromoneVanished.AddListener(ReactToPheromoneVanished);
         }
 
@@ -75,7 +80,7 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician.States
         {
             List<PheromoneInfo> untracked_pheromones = Info.GetUntrackedPheromones(pheromones, Info.TrackedPheromones);
             untracked_pheromones.Remove(pheromone_to_track);
-            PheromoneInfo pheromone = Info.GetNearestPheromone(untracked_pheromones);
+            PheromoneInfo? pheromone = Info.GetNearestPheromone(untracked_pheromones);
 
             if (pheromone != null)
             {

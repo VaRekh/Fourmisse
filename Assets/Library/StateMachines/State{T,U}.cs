@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Assets.Library.StateMachines
 {
     public abstract class State<TStateCode, TInfo>
-        where TStateCode : Enum
+        where TStateCode : struct, Enum
     {
         protected Updater<TStateCode, TInfo> Updater { get; private set; }
         protected TInfo Info { get; private set; }

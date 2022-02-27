@@ -1,3 +1,4 @@
+#nullable enable
 using UnityEngine;
 using Assets.Library;
 
@@ -9,9 +10,9 @@ namespace Assets.Scripts
     public class Resource : MonoBehaviour
     {
         [SerializeField]
-        private UintReference load;
+        private UintReference load = new();
 
-        public Collectable Collectable { get; private set; }
+        public Collectable? Collectable { get; private set; }
 
         private void Start()
         {

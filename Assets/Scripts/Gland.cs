@@ -1,3 +1,4 @@
+#nullable enable
 using UnityEngine;
 using UnityEngine.Assertions;
 using Assets.Library;
@@ -12,9 +13,9 @@ namespace Assets.Scripts
     public class Gland : MonoBehaviour
     {
         [SerializeField]
-        private SerializedInfo info;
+        private SerializedInfo info = new();
 
-        private Updater<GlandStateCode, Info> gland_updater;
+        private Updater<GlandStateCode, Info>? gland_updater;
 
         private void Start()
         {
@@ -42,7 +43,7 @@ namespace Assets.Scripts
                 }
             );
 
-            GlandFactory gland_factory = new GlandFactory();
+            var gland_factory = new GlandFactory();
 
             gland_updater = new Updater<GlandStateCode, Info>(actual_info, gland_factory);
             gland_updater.Start();
@@ -50,7 +51,9 @@ namespace Assets.Scripts
 
         private void Update()
         {
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
             gland_updater.Update(Time.deltaTime);
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
         }
 
         private void InitPheromone(GameObject pheromone, Identifier ant_identifier, uint intensity)

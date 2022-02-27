@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Assertions;
@@ -20,9 +21,6 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician
             }
         }
 
-
-        private ControllerInfo.SharedInfo shared_info;
-
         [SerializeField]
         [Tooltip(
         "Distance from a pheromone which is considered close enough " +
@@ -33,12 +31,11 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician
         private float direction_change_per_second;
         [SerializeField]
         private float seconds_before_switching_to_random_move;
-        [SerializeField][HideInInspector]
-        private Collider2D collider;
-        [SerializeField][HideInInspector]
-        private Detector<PheromoneInfo> pheromone_detector;
 
-        private readonly HashSet<PheromoneInfo> tracked_pheromones = new HashSet<PheromoneInfo>();
+        private Detector<PheromoneInfo> pheromone_detector = new(); // TODO: need refactoring because assigning a new() to this field is useless as it is later replaced by a real object
+        private Collider2D collider = new(); // TODO: need refactoring because assigning a new() to this field is useless as it is later replaced by a real object
+        private ControllerInfo.SharedInfo shared_info = new(); // TODO: need refactoring because assigning a new() to this field is useless as it is later replaced by a real object
+        private readonly HashSet<PheromoneInfo> tracked_pheromones = new();
 
         private ControllerInfo.SharedInfo SharedInfo
         {
@@ -135,10 +132,10 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician
         public void ClearTrackedPheromones()
             => TrackedPheromones.Clear();
 
-        public PheromoneInfo GetNearestPheromone(List<PheromoneInfo> pheromones)
+        public PheromoneInfo? GetNearestPheromone(List<PheromoneInfo> pheromones)
         {
             Vector2 ant_collider_position = Collider.transform.position;
-            PheromoneInfo nearest_pheromone = pheromone_detector.GetNearestEntity(pheromones, ant_collider_position);
+            PheromoneInfo? nearest_pheromone = pheromone_detector.GetNearestEntity(pheromones, ant_collider_position);
             return nearest_pheromone;
         }
 

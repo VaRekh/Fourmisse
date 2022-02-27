@@ -1,4 +1,5 @@
-﻿using UnityEngine.Assertions;
+﻿#nullable enable
+using UnityEngine.Assertions;
 using Assets.Library.StateMachines.Controller.States;
 
 namespace Assets.Library.StateMachines.Controller
@@ -7,7 +8,7 @@ namespace Assets.Library.StateMachines.Controller
     {
         public State<StateCode, ControllerInfo> Get(StateCode code, Updater<StateCode, ControllerInfo> updater, ControllerInfo info)
         {
-            State<StateCode, ControllerInfo> state = null;
+            State<StateCode, ControllerInfo>? state = null;
 
 
             switch (code)
@@ -27,7 +28,9 @@ namespace Assets.Library.StateMachines.Controller
 
             Assert.IsNotNull(state);
 
+#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
             return state;
+#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
         }
     }
 }

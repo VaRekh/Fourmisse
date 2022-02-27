@@ -1,3 +1,4 @@
+#nullable enable
 using UnityEngine;
 using UnityEngine.Assertions;
 using Assets.Library;
@@ -12,11 +13,11 @@ namespace Assets.Scripts
     public class Controller : MonoBehaviour
     {
         [SerializeField]
-        private ControllerInfo info;
+        private ControllerInfo info = new();
         [SerializeField]
-        private LayerReference ant_pheromone_detection_layer;
+        private LayerReference? ant_pheromone_detection_layer;
 
-        private Updater<ControllerStateCode, ControllerInfo> controller_updater;
+        private Updater<ControllerStateCode, ControllerInfo>? controller_updater;
 
         public Transform Anthill
         {
@@ -44,11 +45,13 @@ namespace Assets.Scripts
 
             var candidate_colliders = parent_transform.GetComponentsInChildren<Collider2D>();
 
-            Collider2D pheromone_detection_area = null;
+            Collider2D? pheromone_detection_area = null;
 
             foreach (Collider2D candidate_collider in candidate_colliders)
             {
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
                 if (candidate_collider.gameObject.layer == ant_pheromone_detection_layer.Index)
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
                 {
                     pheromone_detection_area = candidate_collider;
                     break;
@@ -77,7 +80,9 @@ namespace Assets.Scripts
 
             info.Init
             (
+#pragma warning disable CS8604 // Existence possible d'un argument de référence null.
                 pheromone_detection_area,
+#pragma warning restore CS8604 // Existence possible d'un argument de référence null.
                 rb,
                 parent_transform,
                 detector,
@@ -89,7 +94,7 @@ namespace Assets.Scripts
             );
             
 
-            ControllerFactory controller_factory = new ControllerFactory();
+            var controller_factory = new ControllerFactory();
             controller_updater = new Updater<ControllerStateCode, ControllerInfo>(info, controller_factory, ControllerStateCode.Seek);
             controller_updater.Start();
 
@@ -107,12 +112,16 @@ namespace Assets.Scripts
         // Update is called once per frame
         private void Update()
         {
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
             controller_updater.Update(Time.deltaTime);
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
         }
 
         private void FixedUpdate()
         {
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
             controller_updater.FixedUpdate(Time.fixedDeltaTime);
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
         }
     }
 }

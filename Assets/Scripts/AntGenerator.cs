@@ -1,5 +1,7 @@
+#nullable enable
 using System;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Assets.Scripts
 {
@@ -8,7 +10,7 @@ namespace Assets.Scripts
     public class AntGenerator : MonoBehaviour
     {
         [SerializeField]
-        private GameObject AntTemplate;
+        private GameObject? ant_template;
         [SerializeField]
         private byte ant_count_at_start;
         [SerializeField]
@@ -18,23 +20,22 @@ namespace Assets.Scripts
 
         void Start()
         {
+            Assert.IsNotNull(ant_template);
             Generate(ant_count_at_start);
             var enabler = GetComponent<AntGenerationEnabler>();
             enabler.ListenToEnableAntGeneration(OnEnableAntGeneration, ant_production_cost);
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            
         }
 
         private void Generate(byte count)
         {
             for (byte i = 0; i < count; ++i)
             {
-                var ant = Instantiate(AntTemplate, transform.position, transform.rotation);
+                var ant = Instantiate(ant_template, transform.position, transform.rotation);
+                Assert.IsNotNull(ant);
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
                 var controller = ant.GetComponentInChildren<Controller>();
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
+                Assert.IsNotNull(controller);
                 controller.Anthill = transform;
             }
         }

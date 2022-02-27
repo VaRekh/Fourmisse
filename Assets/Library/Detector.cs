@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#nullable enable
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Assertions;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Assets.Library
         public UnityEvent<T, List<T>> EntityVanished { get; private set; }
 
         public List<T> DetectedEntitiesAsList
-            => new List<T>(DetectedEntities);
+            => new (DetectedEntities);
 
         public Detector()
         {
@@ -44,11 +45,11 @@ namespace Assets.Library
             }
         }
 
-        public T GetNearestEntity(List<T> entities, Vector2 ant_collider_position)
+        public T? GetNearestEntity(List<T> entities, Vector2 ant_collider_position)
         {
             Assert.IsNotNull(entities);
 
-            T nearest_entities = null;
+            T? nearest_entities = null;
 
             if (entities.Count > 0)
             {
@@ -77,7 +78,7 @@ namespace Assets.Library
 
         public List<T> GetUntrackedEntities(List<T> entities, HashSet<T> tracked_entities)
         {
-            List<T> untracked_entities = new List<T>();
+            var untracked_entities = new List<T>();
 
             foreach (T candidate in entities)
             {

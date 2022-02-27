@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#nullable enable
+using UnityEngine;
 using Assets.Library;
 
 namespace Assets.Scripts
@@ -14,9 +15,9 @@ namespace Assets.Scripts
         [Tooltip("[O - 100] %")]
         [Range(0f, 100f)]
         private float minimum_size_percentage;
-        private FadingEntity FadingEntity { get; set; }
+        private FadingEntity? FadingEntity { get; set; }
 
-        public PheromoneInfo info { get; private set; }
+        public PheromoneInfo? Info { get; private set; }
 
         private void Start()
         {
@@ -26,12 +27,14 @@ namespace Assets.Scripts
 
         public void Init(Identifier ant_identifier, uint intensity)
         {
-            info = new PheromoneInfo(ant_identifier, transform, new Intensity(intensity));
+            Info = new PheromoneInfo(ant_identifier, transform, new Intensity(intensity));
         }
 
         private void Update()
         {
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
             FadingEntity.Update(Time.deltaTime);
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
             transform.localScale = FadingEntity.LocalScale;
         }
 

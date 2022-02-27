@@ -1,4 +1,5 @@
-﻿using UnityEngine.Assertions;
+﻿#nullable enable
+using UnityEngine.Assertions;
 using Assets.Library.StateMachines.Gland.States;
 
 namespace Assets.Library.StateMachines.Gland
@@ -7,7 +8,7 @@ namespace Assets.Library.StateMachines.Gland
     {
         public State<StateCode, Info> Get(StateCode code, Updater<StateCode, Info> updater, Info info)
         {
-            State<StateCode, Info> state = null;
+            State<StateCode, Info>? state = null;
 
 
             switch (code)
@@ -24,7 +25,9 @@ namespace Assets.Library.StateMachines.Gland
 
             Assert.IsNotNull(state);
 
+#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
             return state;
+#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
         }
     }
 }

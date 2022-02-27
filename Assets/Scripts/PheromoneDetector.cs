@@ -1,3 +1,4 @@
+#nullable enable
 using UnityEngine;
 using UnityEngine.Assertions;
 using Assets.Library;
@@ -8,34 +9,30 @@ namespace Assets.Scripts
     [RequireComponent(typeof(Collider2D))]
     public class PheromoneDetector : MonoBehaviour
     {
-        private Detector<PheromoneInfo> detector;
-
-        public Detector<PheromoneInfo> Detector
-            => detector;
-
-        private void Awake()
-        {
-            detector = new Detector<PheromoneInfo>();
-        }
+        public Detector<PheromoneInfo> Detector { get; private set; } = new();
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
             var pheromone = collision.gameObject.GetComponent<Pheromone>();
             Assert.IsNotNull(pheromone);
-            var entity = pheromone.info;
+            var entity = pheromone.Info;
             Assert.IsNotNull(entity);
 
-            detector.AddAppearingEntity(entity);
+#pragma warning disable CS8604 // Existence possible d'un argument de référence null.
+            Detector.AddAppearingEntity(entity);
+#pragma warning restore CS8604 // Existence possible d'un argument de référence null.
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
             var pheromone = collision.gameObject.GetComponent<Pheromone>();
             Assert.IsNotNull(pheromone);
-            var entity = pheromone.info;
+            var entity = pheromone.Info;
             Assert.IsNotNull(entity);
 
-            detector.RemoveVanishingEntity(entity);
+#pragma warning disable CS8604 // Existence possible d'un argument de référence null.
+            Detector.RemoveVanishingEntity(entity);
+#pragma warning restore CS8604 // Existence possible d'un argument de référence null.
         }
     }
 }

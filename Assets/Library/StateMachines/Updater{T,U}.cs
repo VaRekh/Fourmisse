@@ -5,7 +5,7 @@ using UnityEngine.Events;
 namespace Assets.Library.StateMachines
 {
     public class Updater<TStateCode, TInfo>
-        where TStateCode : Enum
+        where TStateCode : struct, Enum
     {
         private State<TStateCode, TInfo>current_state;
 

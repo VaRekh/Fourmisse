@@ -6,7 +6,7 @@ namespace Assets.Library
     public class LayerReference : ScriptableObject
     {
         [SerializeField]
-        private string layer;
+        private string layer = "";
 
         public string Layer
             => layer;

@@ -14,7 +14,7 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician.States
         {
             random_move_stopwatch = new Stopwatch(Info.DirectionChangeInterval);
 
-            Range range = new Range(-1f, 1f);
+            var range = new Range(-1f, 1f);
             vector_generator = new Vector2Generator(range, range);
         }
 

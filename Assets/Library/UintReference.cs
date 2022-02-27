@@ -10,7 +10,7 @@ namespace Assets.Library
         [SerializeField]
         public uint Value;
 
-        public UintReference(uint value)
+        public UintReference(uint value = 0u)
         {
             Value = value;
         }

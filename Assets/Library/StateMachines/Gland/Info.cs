@@ -1,12 +1,10 @@
 ﻿#nullable enable
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Assertions;
 
 namespace Assets.Library.StateMachines.Gland
 {
-    [Serializable]
     public class Info
     {
         public Info
@@ -47,7 +45,9 @@ namespace Assets.Library.StateMachines.Gland
             get
             {
                 Assert.IsNotNull(SerializedInfo.PheromoneTemplate);
+#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
                 return SerializedInfo.PheromoneTemplate;
+#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
             }
         }
         private Transform GenerationTransform
@@ -55,7 +55,9 @@ namespace Assets.Library.StateMachines.Gland
             get
             {
                 Assert.IsNotNull(SerializedInfo.GenerationPosition);
+#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
                 return SerializedInfo.GenerationPosition;
+#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
             }
         }
         private float GeneratedPheromonePerSecond

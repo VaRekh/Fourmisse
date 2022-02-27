@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2539c7874683e7489aad5e1b7ba1dc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AntTemplate: {fileID: 1572199203428542270, guid: cd3ed418a6399f44d80c9d7182acb040, type: 3}
+  ant_template: {fileID: 1572199203428542270, guid: cd3ed418a6399f44d80c9d7182acb040, type: 3}
   ant_count_at_start: 2
   ant_count_generated_when_enough_resources: 1
   ant_production_cost: 20

@@ -1,4 +1,5 @@
-﻿using UnityEngine.Assertions;
+﻿#nullable enable
+using UnityEngine.Assertions;
 using TacticianStateCode = Assets.Library.StateMachines.Controller.SeekTactician.StateCode;
 using Assets.Library.StateMachines.Controller.SeekTactician.States;
 
@@ -13,7 +14,7 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician
         SeekTacticianInfo info
         )
         {
-            State<TacticianStateCode, SeekTacticianInfo> state = null;
+            State<TacticianStateCode, SeekTacticianInfo>? state = null;
 
 
             switch (code)
@@ -36,7 +37,9 @@ namespace Assets.Library.StateMachines.Controller.SeekTactician
 
             Assert.IsNotNull(state);
 
+#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
             return state;
+#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
         }
     }
 }

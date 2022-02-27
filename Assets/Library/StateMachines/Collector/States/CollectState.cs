@@ -1,11 +1,12 @@
-﻿using UnityEngine.Assertions;
+﻿#nullable enable
+using UnityEngine.Assertions;
 
 namespace Assets.Library.StateMachines.Collector.States
 {
     public class CollectState : State<StateCode, CollectorInfo>
     {
         private readonly Stopwatch stopwatch;
-        private Collectable collectable;
+        private Collectable? collectable;
 
         private float CollectingInterval
             => 1f / Info.Speed;
@@ -23,15 +24,16 @@ namespace Assets.Library.StateMachines.Collector.States
 
             bool is_data_available = data.Length > 0;
             Assert.IsTrue(is_data_available);
-            collectable = null;
             collectable = GetCollectable(data[0]);
 
             static Collectable GetCollectable(object data)
             {
-                Collectable collectable_found = data as Collectable;
+                Collectable? collectable_found = data as Collectable;
                 Assert.IsNotNull(collectable_found);
 
+#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
                 return collectable_found;
+#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
             }
         }
 
@@ -46,7 +48,9 @@ namespace Assets.Library.StateMachines.Collector.States
             {
                 stopwatch.Reset();
 
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
                 uint load_acquired = collectable.Collect(Info.QuantityPerCollect);
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
                 Info.Load.Increment(load_acquired);
                 is_collectable_empty = load_acquired == 0U;
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Assertions;
@@ -15,8 +16,10 @@ namespace Assets.Library.StateMachines.Controller
             [SerializeField]
             private float movespeed;
 
+#pragma warning disable CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
             private Transform ant;
-            private Rigidbody2D rigidbody;
+#pragma warning restore CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
+            private Rigidbody2D rigidbody = new(); // TODO: need refactoring because assigning a new() to this field is useless as it is later replaced by a real object
 
 
             public float Movespeed
@@ -58,14 +61,14 @@ namespace Assets.Library.StateMachines.Controller
         }
 
         [SerializeField]
-        private SharedInfo shared_info;
+        private SharedInfo shared_info = new();
 
         [SerializeField]
-        private SeekTacticianInfo seek_tactician_info;
+        private readonly SeekTacticianInfo seek_tactician_info = new();
         [SerializeField]
+#pragma warning disable CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
         private Transform anthill;
-        [SerializeField][HideInInspector]
-        private Detector<PheromoneInfo> pheromone_detector;
+#pragma warning restore CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
 
         public float Movespeed
             => shared_info.Movespeed;
@@ -97,13 +100,14 @@ namespace Assets.Library.StateMachines.Controller
         public Rigidbody2D Rigidbody
             => shared_info.Rigidbody;
 
-        private BoundedUint Load { get; set; }
+        private BoundedUint Load { get; set; } = new(); // TODO: need refactoring because assigning a new() to this field is useless as it is later replaced by a real object
+
 
         public bool CollectorIsNotFull
             => Load.IsNotFull;
 
         #region Subscribe/Unsubscribed
-        private UnityEvent<Collectable> ContactWithNonEmptyCollectableHappened { get; set; }
+        private UnityEvent<Collectable> ContactWithNonEmptyCollectableHappened { get; set; } = new(); // TODO: need refactoring because assigning a new() to this field is useless as it is later replaced by a real object
 
         public void ListenToContactWithNonEmptyCollectableHappened(UnityAction<Collectable> listener)
         {
@@ -142,7 +146,7 @@ namespace Assets.Library.StateMachines.Controller
         }
 
 
-        private UnityEvent<Storage> ContactWithStorageHappened { get; set; }
+        private UnityEvent<Storage> ContactWithStorageHappened { get; set; } = new(); // TODO: need refactoring because assigning a new() to this field is useless as it is later replaced by a real object
 
         public void ListenToContactWithStorageHappened(UnityAction<Storage> listener)
         {
@@ -162,7 +166,7 @@ namespace Assets.Library.StateMachines.Controller
             Rigidbody2D rigidbody,
             Transform ant,
             Detector<PheromoneInfo> pheromone_detector,
-            UnityEvent<Collectable>? contact_with_non_empty_collectable_happened,
+            UnityEvent<Collectable> contact_with_non_empty_collectable_happened,
             UnityEventSubscription collector_completely_emptied,
             UnityEventSubscription collector_completely_loaded,
             UnityEvent<Storage> contact_with_storage_happened,

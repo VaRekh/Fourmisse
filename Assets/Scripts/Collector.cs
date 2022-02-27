@@ -1,3 +1,4 @@
+#nullable enable
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Assertions;
@@ -12,7 +13,7 @@ namespace Assets.Scripts
     public class Collector : MonoBehaviour
     {
         [SerializeField]
-        private CollectorInfo info;
+        private CollectorInfo info = new();
 
         public BoundedUint Load
             => info.Load;
@@ -28,14 +29,14 @@ namespace Assets.Scripts
             => info.StopListeningToCollectorCompletelyLoaded(listener);
 
 
-        private Updater<StateCode, CollectorInfo> collect_updater;
+        private Updater<StateCode, CollectorInfo>? collect_updater;
 
 
 
         // Start is called before the first frame update
         private void Start()
         {
-            CollectorFactory collector_factory = new CollectorFactory();
+            var collector_factory = new CollectorFactory();
 
 
             var parent_transform = transform.parent;
@@ -70,7 +71,9 @@ namespace Assets.Scripts
         // Update is called once per frame
         private void Update()
         {
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
             collect_updater.Update(Time.deltaTime);
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
         }
     }
 }

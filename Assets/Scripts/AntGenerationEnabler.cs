@@ -1,6 +1,8 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Assertions;
 using Assets.Library;
 
 namespace Assets.Scripts
@@ -10,18 +12,17 @@ namespace Assets.Scripts
     public class AntGenerationEnabler : MonoBehaviour
     {
         private uint load_required_for_generation;
-        private UnityEvent<Action<uint>> EnableAntGeneration { get; set; }
-        private Storage Storage { get; set; }
-
-        public void Awake()
-        {
-            EnableAntGeneration = new();
-        }
+        private UnityEvent<Action<uint>> EnableAntGeneration { get; set; } = new();
+        private Storage? Storage { get; set; }
 
         public void Start()
         {
-            Storage = GetComponent<Anthill>().Storage;
+            var storage = GetComponent<Anthill>().Storage;
+            Assert.IsNotNull(storage);
+            Storage = storage;
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
             Storage.ListenToLoadIncreased(CheckLoad);
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
         }
 
         private void CheckLoad(uint load)
@@ -29,7 +30,9 @@ namespace Assets.Scripts
             bool anthill_has_enough_resources = load >= load_required_for_generation;
             if (anthill_has_enough_resources)
             {
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
                 EnableAntGeneration.Invoke(Storage.Consume);
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
             }
         }
 

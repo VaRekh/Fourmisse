@@ -6,7 +6,7 @@ namespace Assets.Library.StateMachines.Gland.States
     public class ProductionState : State<StateCode, Info>
     {
         private readonly Stopwatch stopwatch;
-        private Collectable collectable;
+        private Collectable? collectable;
 
         public ProductionState(Updater<StateCode, Info> updater, Info info)
             : base(updater, info)
@@ -23,7 +23,7 @@ namespace Assets.Library.StateMachines.Gland.States
 
             collectable = GetCollectable(data[0]);
 
-            static Collectable GetCollectable(object data)
+            static Collectable? GetCollectable(object data)
             {
                 Collectable? collectable_found = data as Collectable;
                 Assert.IsNotNull(collectable_found);
@@ -43,7 +43,9 @@ namespace Assets.Library.StateMachines.Gland.States
 
             if (is_time_to_generate)
             {
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
                 var intensity = new Intensity(collectable.LoadLeft);
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
                 Info.InstantiatePheromone(intensity);
                 stopwatch.Reset();
             }

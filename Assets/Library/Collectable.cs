@@ -6,7 +6,7 @@ namespace Assets.Library
     {
         private UintReference Load { get; set; }
 
-        private UnityEvent completely_emtpied = new();
+        private readonly UnityEvent completely_emtpied = new();
 
         public uint LoadLeft
         {
